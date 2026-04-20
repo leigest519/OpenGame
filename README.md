@@ -1,5 +1,5 @@
 <div align="center">
-1
+
 # OpenGame: Open Agentic Coding for Games
 
 Yilei Jiang, Jinyuan Hu, Qianyin Xiao, Yaozhi Zheng, Ruize Ma, Kaituo Feng,<br>
