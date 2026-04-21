@@ -56,7 +56,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
     </td>
     <td align="center" valign="top" width="50%">
       <p align="center"><b><font size="4">Harry Potter: Arithmancy Academy</font></b></p>
-      <video src="https://github.com/user-attachments/assets/27c623b4-80dc-4549-8123-441e9d7ec075"
+      <video src="https://github.com/user-attachments/assets/d70015c5-e2f2-4c5d-b842-8d97f95cd765"
              poster="assets/posters/harryPotter.png"
              width="100%" loop muted autoplay playsinline preload="metadata">
       </video>
