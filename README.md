@@ -30,7 +30,7 @@ Jiaming Han, Tianshuo Peng, Kaixuan Fan, Manyuan Zhang, Xiangyu Yue*
 
 ## 📢 News
 
-* **[2026-04-21]** 🚀 We have officially released the **OpenGame** framework! You can now access our [Project Page](https://www.opengame-project-page.com/), read the [arXiv Paper](#), and start generating your own web games end-to-end.
+* **[2026-04-21]** 🚀 We have officially released the **OpenGame** framework! You can now access our [Project Page](https://www.opengame-project-page.com/), read the [arXiv Paper](https://arxiv.org/abs/2604.18394), and start generating your own web games end-to-end.
 ## Playable Demos
 
 A curated gallery of web games generated end-to-end by OpenGame from a single prompt. Hover any tile to preview the gameplay; click through for the live build or the full source archive used by the agent.
