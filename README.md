@@ -13,6 +13,7 @@ Jiaming Han, Tianshuo Peng, Kaixuan Fan, Manyuan Zhang, Xiangyu Yue*
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://www.opengame-project-page.com/)
 [![arXiv](https://img.shields.io/badge/arXiv-b31b1b.svg)](https://arxiv.org/abs/2604.18394)
+[![Hugging Face Paper](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Paper-yellow)](https://huggingface.co/papers/2604.18394)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 
 **An open-source agentic framework for end-to-end web game creation from a prompt.**
