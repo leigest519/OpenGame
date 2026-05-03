@@ -56,8 +56,8 @@ export class DefaultOpenAICompatibleProvider implements OpenAICompatibleProvider
   }
 
   getDefaultGenerationConfig(): GenerateContentConfig {
-    return {
-      topP: 0.95,
-    };
+    // GPT-5 / o-series reasoning models reject top_p; do not inject a default.
+    // Users can still set samplingParams.top_p explicitly if their model accepts it.
+    return {};
   }
 }

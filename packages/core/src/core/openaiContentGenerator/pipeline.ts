@@ -323,8 +323,15 @@ export class ContentGenerationPipeline {
       return {};
     }
 
+    // GPT-5.x does not support reasoning_effort + function tools via
+    // /v1/chat/completions (requires /v1/responses). Skip the param unless
+    // explicitly opted in via reasoning.effort.
+    if (!reasoning?.effort) {
+      return {};
+    }
+
     return {
-      reasoning_effort: reasoning?.effort ?? 'medium',
+      reasoning_effort: reasoning.effort,
     };
   }
 
