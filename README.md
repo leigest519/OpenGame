@@ -24,6 +24,41 @@ Jiaming Han, Tianshuo Peng, Kaixuan Fan, Manyuan Zhang, Xiangyu Yue*
   <img src="assets/opengame_teaser.png" alt="OpenGame Teaser" width="100%">
 </div>
 
+---
+
+<p align="center">
+  <a href="https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame">
+    <img src="docs/atlas-cloud-logo.png" alt="Atlas Cloud" width="200">
+  </a>
+</p>
+
+> 🎁 **[Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame)** is a full-modal AI inference platform that gives developers a single AI API to access video generation, image generation, and LLM APIs. Instead of managing multiple vendor integrations, you connect once and get unified access to 300+ curated models across all modalities.
+>
+> Atlas Cloud exposes an **OpenAI-compatible** endpoint at `https://api.atlascloud.ai/v1`, so it plugs straight into OpenGame's existing `openai-compat` provider — point the agent runtime (`OPENAI_BASE_URL`) and any `OPENGAME_*` modality at it without writing a line of glue code. That makes it a convenient single backend for the reasoning / GDD / classifier loop, the ABC-notation audio model, and OpenAI-shaped image routes.
+>
+> Check out Atlas Cloud's new coding plan promotion for more budget-friendly API access: [https://www.atlascloud.ai/console/coding-plan](https://www.atlascloud.ai/console/coding-plan)
+
+<details>
+<summary><b>Official Atlas Cloud LLM models</b> (OpenAI-compatible, synced with <a href="https://www.atlascloud.ai/zh/models/list/llm">the model list</a>)</summary>
+
+These ids work as `OPENAI_MODEL` for the agent runtime or as `OPENGAME_REASONING_MODEL` / `OPENGAME_AUDIO_MODEL` when `*_PROVIDER=openai-compat` and `*_BASE_URL=https://api.atlascloud.ai/v1`.
+
+- **Anthropic (Claude):** `anthropic/claude-haiku-4.5-20251001`, `anthropic/claude-opus-4.8`, `anthropic/claude-sonnet-4.6`
+- **OpenAI (GPT):** `openai/gpt-5.4`, `openai/gpt-5.5`
+- **Google (Gemini):** `google/gemini-3.1-flash-lite`, `google/gemini-3.1-pro-preview`, `google/gemini-3.5-flash`
+- **Alibaba Qwen:** `Qwen/Qwen3-Coder`, `qwen/qwen3-coder-next`, `qwen/qwen3-max-2026-01-23`, `Qwen/Qwen3-235B-A22B-Instruct-2507`, `Qwen/Qwen3-Next-80B-A3B-Instruct`, `qwen/qwen3-32b`, `qwen/qwen3.6-plus`
+- **DeepSeek:** `deepseek-ai/DeepSeek-V3-0324`, `deepseek-ai/DeepSeek-V3.1-Terminus`, `deepseek-ai/deepseek-v3.2`, `deepseek-ai/deepseek-v4-pro`
+- **Moonshot (Kimi):** `moonshotai/Kimi-K2-Instruct-0905`, `moonshotai/Kimi-K2-Thinking`, `moonshotai/kimi-k2.6`
+- **Zhipu GLM:** `zai-org/GLM-4.6`, `zai-org/glm-4.7`, `zai-org/glm-5`
+- **MiniMax:** `MiniMaxAI/MiniMax-M2`, `minimaxai/minimax-m2.5`
+- **xAI:** `xai/grok-4.3`
+- **Kwaipilot (KAT):** `kwaipilot/kat-coder-pro-v2`
+
+For game-asset generation, Atlas Cloud also serves OpenAI-shaped text-to-image routes (e.g. `openai/gpt-image-2/text-to-image`, `qwen/qwen-image-2.0/text-to-image`) usable via `OPENGAME_IMAGE_PROVIDER=openai-compat`. The full, always-current catalog lives at [`/v1/models`](https://api.atlascloud.ai/v1/models) and the [model list page](https://www.atlascloud.ai/zh/models/list/llm).
+
+</details>
+
+---
 
 ## Abstract
 
@@ -217,6 +252,16 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"     # optional
 export OPENAI_MODEL="gpt-4o"                            # optional, swap in GameCoder-27B when running it locally
 ```
 
+Because this flow is OpenAI-compatible, you can also point it at
+[Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame)
+to reach 300+ models (Claude, GPT, Qwen-Coder, DeepSeek, GLM, Kimi, …) through one key:
+
+```bash
+export OPENAI_API_KEY="$ATLASCLOUD_API_KEY"
+export OPENAI_BASE_URL="https://api.atlascloud.ai/v1"
+export OPENAI_MODEL="deepseek-ai/DeepSeek-V3-0324"     # or anthropic/claude-sonnet-4.6, Qwen/Qwen3-Coder, ...
+```
+
 #### Asset / GDD provider keys (image, video, audio, reasoning)
 
 Beyond the main agent LLM, OpenGame's asset-generation tools talk to image,
@@ -232,9 +277,14 @@ export OPENGAME_IMAGE_API_KEY=sk-...
 ```
 
 A complete env-var reference, settings.json schema, and examples for OpenAI /
-fal.ai / OpenRouter / DashScope / Doubao live in
+Atlas Cloud / fal.ai / OpenRouter / DashScope / Doubao live in
 [`docs/users/configuration/api-keys.md`](docs/users/configuration/api-keys.md).
 A copy-paste template is at [`.env.example`](.env.example).
+
+> **Tip.** Any `openai-compat` modality (reasoning / image / audio) can target
+> [Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame)
+> by setting `OPENGAME_<MOD>_BASE_URL=https://api.atlascloud.ai/v1` — handy if you
+> want one provider behind every modality instead of juggling several keys.
 
 OpenGame prints a one-line provider-status banner at startup so you can
 confirm which modalities are wired up before the run begins.
