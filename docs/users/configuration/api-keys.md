@@ -40,8 +40,8 @@ the interactive `/auth` command.
 > 300+ models — Claude, GPT, Qwen-Coder, DeepSeek, GLM, Kimi for `reasoning`/`audio`,
 > plus OpenAI-shaped image routes for `image`. Use it through `openai-compat` when you
 > want a single key behind several modalities instead of mixing vendors. The full
-> catalog is at [`/v1/models`](https://api.atlascloud.ai/v1/models); budget-friendly
-> access is on the [coding plan](https://www.atlascloud.ai/console/coding-plan).
+> catalog is on the [model list page](https://www.atlascloud.ai/zh/models/list/llm);
+> budget-friendly access is on the [coding plan](https://www.atlascloud.ai/console/coding-plan).
 
 ---
 
@@ -121,13 +121,13 @@ the reasoning, audio, and image modalities (video still needs `tongyi`/`doubao`)
 export OPENGAME_REASONING_PROVIDER=openai-compat
 export OPENGAME_REASONING_API_KEY=$ATLASCLOUD_API_KEY
 export OPENGAME_REASONING_BASE_URL=https://api.atlascloud.ai/v1
-export OPENGAME_REASONING_MODEL=deepseek-ai/DeepSeek-V3-0324   # or Qwen/Qwen3-Coder, anthropic/claude-sonnet-4.6
+export OPENGAME_REASONING_MODEL=deepseek-ai/deepseek-v4-pro   # reasoning model, give it max_tokens >= 512; or Qwen/Qwen3-Coder, anthropic/claude-sonnet-4.6
 
 # audio: reuse the same backend for ABC music notation
 export OPENGAME_AUDIO_PROVIDER=openai-compat
 export OPENGAME_AUDIO_API_KEY=$ATLASCLOUD_API_KEY
 export OPENGAME_AUDIO_BASE_URL=https://api.atlascloud.ai/v1
-export OPENGAME_AUDIO_MODEL=deepseek-ai/DeepSeek-V3-0324
+export OPENGAME_AUDIO_MODEL=deepseek-ai/deepseek-v4-pro
 
 # image: OpenAI-shaped text-to-image route
 export OPENGAME_IMAGE_PROVIDER=openai-compat
@@ -136,8 +136,8 @@ export OPENGAME_IMAGE_BASE_URL=https://api.atlascloud.ai/v1
 export OPENGAME_IMAGE_MODEL=openai/gpt-image-2/text-to-image
 ```
 
-Browse the full model catalog at <https://www.atlascloud.ai/zh/models/list/llm>
-or via the live [`/v1/models`](https://api.atlascloud.ai/v1/models) endpoint.
+Browse the full model catalog and per-model details on the
+[model list page](https://www.atlascloud.ai/zh/models/list/llm).
 
 A copy-paste template for all variables lives at the repository root in
 [`.env.example`](../../../.env.example).

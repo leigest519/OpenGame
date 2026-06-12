@@ -41,20 +41,21 @@ Jiaming Han, Tianshuo Peng, Kaixuan Fan, Manyuan Zhang, Xiangyu Yue*
 <details>
 <summary><b>Official Atlas Cloud LLM models</b> (OpenAI-compatible, synced with <a href="https://www.atlascloud.ai/zh/models/list/llm">the model list</a>)</summary>
 
-These ids work as `OPENAI_MODEL` for the agent runtime or as `OPENGAME_REASONING_MODEL` / `OPENGAME_AUDIO_MODEL` when `*_PROVIDER=openai-compat` and `*_BASE_URL=https://api.atlascloud.ai/v1`.
+These ids work as `OPENAI_MODEL` for the agent runtime or as `OPENGAME_REASONING_MODEL` / `OPENGAME_AUDIO_MODEL` when `*_PROVIDER=openai-compat` and `*_BASE_URL=https://api.atlascloud.ai/v1`. A solid default for the agent loop is **`deepseek-ai/deepseek-v4-pro`** — it is a reasoning model, so give it enough `max_tokens` (>= 512) or the content can come back empty with `finish_reason=length`.
 
 - **Anthropic (Claude):** `anthropic/claude-haiku-4.5-20251001`, `anthropic/claude-opus-4.8`, `anthropic/claude-sonnet-4.6`
 - **OpenAI (GPT):** `openai/gpt-5.4`, `openai/gpt-5.5`
 - **Google (Gemini):** `google/gemini-3.1-flash-lite`, `google/gemini-3.1-pro-preview`, `google/gemini-3.5-flash`
-- **Alibaba Qwen:** `Qwen/Qwen3-Coder`, `qwen/qwen3-coder-next`, `qwen/qwen3-max-2026-01-23`, `Qwen/Qwen3-235B-A22B-Instruct-2507`, `Qwen/Qwen3-Next-80B-A3B-Instruct`, `qwen/qwen3-32b`, `qwen/qwen3.6-plus`
-- **DeepSeek:** `deepseek-ai/DeepSeek-V3-0324`, `deepseek-ai/DeepSeek-V3.1-Terminus`, `deepseek-ai/deepseek-v3.2`, `deepseek-ai/deepseek-v4-pro`
-- **Moonshot (Kimi):** `moonshotai/Kimi-K2-Instruct-0905`, `moonshotai/Kimi-K2-Thinking`, `moonshotai/kimi-k2.6`
-- **Zhipu GLM:** `zai-org/GLM-4.6`, `zai-org/glm-4.7`, `zai-org/glm-5`
-- **MiniMax:** `MiniMaxAI/MiniMax-M2`, `minimaxai/minimax-m2.5`
+- **Alibaba Qwen:** `qwen/qwen2.5-7b-instruct`, `Qwen/Qwen3-235B-A22B-Instruct-2507`, `qwen/qwen3-235b-a22b-thinking-2507`, `qwen/qwen3-30b-a3b`, `Qwen/Qwen3-30B-A3B-Instruct-2507`, `qwen/qwen3-30b-a3b-thinking-2507`, `qwen/qwen3-32b`, `qwen/qwen3-8b`, `Qwen/Qwen3-Coder`, `qwen/qwen3-coder-next`, `qwen/qwen3-max-2026-01-23`, `Qwen/Qwen3-Next-80B-A3B-Instruct`, `Qwen/Qwen3-Next-80B-A3B-Thinking`, `Qwen/Qwen3-VL-235B-A22B-Instruct`, `qwen/qwen3-vl-235b-a22b-thinking`, `qwen/qwen3-vl-30b-a3b-instruct`, `qwen/qwen3-vl-30b-a3b-thinking`, `qwen/qwen3-vl-8b-instruct`, `qwen/qwen3.5-122b-a10b`, `qwen/qwen3.5-27b`, `qwen/qwen3.5-35b-a3b`, `qwen/qwen3.5-397b-a17b`, `qwen/qwen3.6-35b-a3b`, `qwen/qwen3.6-plus`
+- **DeepSeek:** `deepseek-ai/deepseek-ocr`, `deepseek-ai/deepseek-r1-0528`, `deepseek-ai/DeepSeek-V3-0324`, `deepseek-ai/DeepSeek-V3.1`, `deepseek-ai/DeepSeek-V3.1-Terminus`, `deepseek-ai/deepseek-v3.2`, `deepseek-ai/DeepSeek-V3.2-Exp`, `deepseek-ai/deepseek-v4-flash`, `deepseek-ai/deepseek-v4-pro`
+- **Moonshot (Kimi):** `moonshotai/Kimi-K2-Instruct`, `moonshotai/Kimi-K2-Instruct-0905`, `moonshotai/Kimi-K2-Thinking`, `moonshotai/kimi-k2.5`, `moonshotai/kimi-k2.6`
+- **Zhipu GLM:** `zai-org/GLM-4.6`, `zai-org/glm-4.7`, `zai-org/glm-5`, `zai-org/glm-5-turbo`, `zai-org/glm-5.1`, `zai-org/glm-5v-turbo`
+- **MiniMax:** `MiniMaxAI/MiniMax-M2`, `minimaxai/minimax-m2.1`, `minimaxai/minimax-m2.5`, `minimaxai/minimax-m2.7`
 - **xAI:** `xai/grok-4.3`
 - **Kwaipilot (KAT):** `kwaipilot/kat-coder-pro-v2`
+- **Other:** `owl`
 
-For game-asset generation, Atlas Cloud also serves OpenAI-shaped text-to-image routes (e.g. `openai/gpt-image-2/text-to-image`, `qwen/qwen-image-2.0/text-to-image`) usable via `OPENGAME_IMAGE_PROVIDER=openai-compat`. The full, always-current catalog lives at [`/v1/models`](https://api.atlascloud.ai/v1/models) and the [model list page](https://www.atlascloud.ai/zh/models/list/llm).
+For game-asset generation, Atlas Cloud also serves OpenAI-shaped text-to-image routes (e.g. `openai/gpt-image-2/text-to-image`, `qwen/qwen-image-2.0/text-to-image`) usable via `OPENGAME_IMAGE_PROVIDER=openai-compat`. The full catalog and per-model details live on the [model list page](https://www.atlascloud.ai/zh/models/list/llm).
 
 </details>
 
@@ -259,7 +260,7 @@ to reach 300+ models (Claude, GPT, Qwen-Coder, DeepSeek, GLM, Kimi, …) through
 ```bash
 export OPENAI_API_KEY="$ATLASCLOUD_API_KEY"
 export OPENAI_BASE_URL="https://api.atlascloud.ai/v1"
-export OPENAI_MODEL="deepseek-ai/DeepSeek-V3-0324"     # or anthropic/claude-sonnet-4.6, Qwen/Qwen3-Coder, ...
+export OPENAI_MODEL="deepseek-ai/deepseek-v4-pro"      # reasoning model, give it max_tokens >= 512; or Qwen/Qwen3-Coder, anthropic/claude-sonnet-4.6, ...
 ```
 
 #### Asset / GDD provider keys (image, video, audio, reasoning)
