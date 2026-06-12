@@ -23,16 +23,25 @@ the interactive `/auth` command.
 
 ## Supported provider families
 
-| Provider name   | Description                                                                                              | Modalities supported           |
-| --------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `tongyi`        | Aliyun DashScope (Wan/Qwen family).                                                                      | reasoning, image, video, audio |
-| `doubao`        | Volcengine ARK (Doubao Seedream/Seedance family).                                                        | reasoning, image, video, audio |
-| `openai-compat` | Any endpoint speaking the OpenAI REST shape (OpenAI, OpenRouter, Together, fal, Stability proxies, ...). | reasoning, image, audio        |
+| Provider name   | Description                                                                                                           | Modalities supported           |
+| --------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `tongyi`        | Aliyun DashScope (Wan/Qwen family).                                                                                   | reasoning, image, video, audio |
+| `doubao`        | Volcengine ARK (Doubao Seedream/Seedance family).                                                                     | reasoning, image, video, audio |
+| `openai-compat` | Any endpoint speaking the OpenAI REST shape (OpenAI, Atlas Cloud, OpenRouter, Together, fal, Stability proxies, ...). | reasoning, image, audio        |
 
 > **Note.** `openai-compat` is intentionally **not** wired up for video,
 > because there is no stable OpenAI-shaped public video API today
 > (Sora and Veo are not part of that surface). If you select it for
 > `OPENGAME_VIDEO_PROVIDER` you'll get a clear error.
+
+> **One backend for every modality.**
+> [Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame)
+> is an OpenAI-compatible aggregator (`https://api.atlascloud.ai/v1`) that fronts
+> 300+ models — Claude, GPT, Qwen-Coder, DeepSeek, GLM, Kimi for `reasoning`/`audio`,
+> plus OpenAI-shaped image routes for `image`. Use it through `openai-compat` when you
+> want a single key behind several modalities instead of mixing vendors. The full
+> catalog is on the [model list page](https://www.atlascloud.ai/zh/models/list/llm);
+> budget-friendly access is on the [coding plan](https://www.atlascloud.ai/console/coding-plan).
 
 ---
 
@@ -100,6 +109,35 @@ export OPENGAME_IMAGE_API_KEY=$FAL_KEY
 export OPENGAME_IMAGE_BASE_URL=https://fal.run/openai/v1
 export OPENGAME_IMAGE_MODEL=fal-ai/flux/dev
 ```
+
+### Example: Atlas Cloud as a single openai-compat backend
+
+[Atlas Cloud](https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=opengame)
+speaks the OpenAI shape at `https://api.atlascloud.ai/v1`, so one key can drive
+the reasoning, audio, and image modalities (video still needs `tongyi`/`doubao`):
+
+```bash
+# reasoning: GDD / classifier / ABC-notation brain
+export OPENGAME_REASONING_PROVIDER=openai-compat
+export OPENGAME_REASONING_API_KEY=$ATLASCLOUD_API_KEY
+export OPENGAME_REASONING_BASE_URL=https://api.atlascloud.ai/v1
+export OPENGAME_REASONING_MODEL=deepseek-ai/deepseek-v4-pro   # reasoning model, give it max_tokens >= 512; or Qwen/Qwen3-Coder, anthropic/claude-sonnet-4.6
+
+# audio: reuse the same backend for ABC music notation
+export OPENGAME_AUDIO_PROVIDER=openai-compat
+export OPENGAME_AUDIO_API_KEY=$ATLASCLOUD_API_KEY
+export OPENGAME_AUDIO_BASE_URL=https://api.atlascloud.ai/v1
+export OPENGAME_AUDIO_MODEL=deepseek-ai/deepseek-v4-pro
+
+# image: OpenAI-shaped text-to-image route
+export OPENGAME_IMAGE_PROVIDER=openai-compat
+export OPENGAME_IMAGE_API_KEY=$ATLASCLOUD_API_KEY
+export OPENGAME_IMAGE_BASE_URL=https://api.atlascloud.ai/v1
+export OPENGAME_IMAGE_MODEL=openai/gpt-image-2/text-to-image
+```
+
+Browse the full model catalog and per-model details on the
+[model list page](https://www.atlascloud.ai/zh/models/list/llm).
 
 A copy-paste template for all variables lives at the repository root in
 [`.env.example`](../../../.env.example).
