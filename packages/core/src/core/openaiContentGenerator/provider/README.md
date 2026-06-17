@@ -8,6 +8,7 @@ This folder contains the different provider implementations for the Qwen Code re
 - `types.ts` - Type definitions and interfaces for providers
 - `default.ts` - Default provider for standard OpenAI-compatible APIs
 - `dashscope.ts` - DashScope (Qwen) specific provider implementation
+- `evolink.ts` - EvoLink OpenAI-compatible provider implementation
 - `openrouter.ts` - OpenRouter specific provider implementation
 - `index.ts` - Main export file for all providers
 
@@ -24,6 +25,10 @@ The `DashScopeOpenAICompatibleProvider` handles DashScope (Qwen) specific featur
 ### OpenRouter Provider
 
 The `OpenRouterOpenAICompatibleProvider` handles OpenRouter specific headers and configurations.
+
+### EvoLink Provider
+
+The `EvoLinkOpenAICompatibleProvider` handles EvoLink's OpenAI-compatible direct language API at `https://direct.evolink.ai/v1`.
 
 ## Adding a New Provider
 

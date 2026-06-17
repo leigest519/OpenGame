@@ -37,6 +37,14 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"   # optional
 export OPENAI_MODEL="gpt-4o"                         # optional; swap in GameCoder-27B when running locally
 ```
 
+For EvoLink, point the same OpenAI-compatible settings at EvoLink's direct language endpoint:
+
+```bash
+export OPENAI_API_KEY="your-evolink-api-key"
+export OPENAI_BASE_URL="https://direct.evolink.ai/v1"
+export OPENAI_MODEL="gpt-5.2"
+```
+
 You can also run `/auth` inside an interactive session to switch authentication methods.
 
 ## Step 3: Start your first session

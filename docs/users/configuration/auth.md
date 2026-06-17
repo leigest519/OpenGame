@@ -57,6 +57,14 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"  # optional
 export OPENAI_MODEL="gpt-4o"                        # optional
 ```
 
+EvoLink exposes an OpenAI-compatible language API as well:
+
+```bash
+export OPENAI_API_KEY="your-evolink-api-key"
+export OPENAI_BASE_URL="https://direct.evolink.ai/v1"
+export OPENAI_MODEL="gpt-5.2"
+```
+
 #### Persisting env vars with `.env` / `.qwen/.env`
 
 OpenGame will auto-load environment variables from the **first** `.env` file it finds (variables are **not merged** across multiple files).
