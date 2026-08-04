@@ -20,7 +20,8 @@ export type GameArchetype =
   | 'top_down'
   | 'grid_logic'
   | 'tower_defense'
-  | 'ui_heavy';
+  | 'ui_heavy'
+  | 'threed_basic';
 
 export interface GenerateGDDParams {
   /**
@@ -111,11 +112,11 @@ Save content between <gdd-content> tags to \`GAME_DESIGN.md\`
 ### Phase 3: Assets (use GDD Section 1)
 - Read \`{DOCS_DIR}/asset_protocol.md\`
 - Call \`generate_game_assets\` with the Asset Registry table from **GDD Section 1**
-- Call \`generate_tilemap\` with ASCII maps from **GDD Section 4** (NOT for ui_heavy, tower_defense, or grid_logic -- these use code-defined grids)
+- Call \`generate_tilemap\` with ASCII maps from **GDD Section 4** (NOT for ui_heavy, tower_defense, grid_logic, or threed_basic)
 - Read \`public/assets/asset-pack.json\` for generated texture keys
 
 ### Phase 4: Config (use GDD Section 2)
-- MERGE GDD Section 2 values INTO the existing \`src/gameConfig.json\` -- add/update game-specific fields using \`{ "value": X }\` wrapper format, but NEVER delete infrastructure fields (\`screenSize\`, \`debugConfig\`, \`renderConfig\`)
+- MERGE GDD Section 2 values INTO the existing \`src/gameConfig.json\` -- add/update game-specific fields using \`{ "value": X }\` wrapper format, but NEVER delete infrastructure fields (\`screenSize\`, \`renderConfig\`, and Phaser's \`debugConfig\`)
 
 ### Phase 5: Code Implementation (use GDD Sections 0, 3, 5)
 - **GDD Section 0** has scene keys -> update \`LevelManager.ts\` and \`main.ts\`
@@ -624,6 +625,19 @@ Tower Defense does NOT use generate_tilemap -- maps are code-defined grids.
 - If template_api.md doesn't list a hook, it DOES NOT EXIST -- design around existing hooks only
 
 `,
+      threed_basic: `---
+
+## Three.js Basic Rules (Built-in)
+
+- Runtime: pinned three.js + TypeScript + Vite; do not import Phaser.
+- World: primitives/custom low-poly geometry, one PerspectiveCamera, ambient + directional light, fog, and a sky texture.
+- Input: WASD/arrows + mouse; ESC uses the existing DOM pause contract. No touch controls.
+- Gameplay: one short route, 5-10 collectible objectives, one reachable completion state.
+- Collision: manual bounds/proximity only. Do not add a physics engine.
+- Assets: use generate_game_assets only for skybox/texture/billboard/floor patch images. No models, GLB/FBX/OBJ, text-to-3D, or generate_tilemap.
+- Architecture: keep main.ts RAF wiring; put declarative positions in SceneMap.ts and rendering/gameplay in GameScene.ts.
+- Required verification: build, WebGL context, non-black canvas, zero console errors, and ESC pause/resume.
+`,
     };
 
     return rules[archetype] || '';
@@ -711,6 +725,12 @@ ${this.getSection4Guidance(archetype)}`;
 { "type": "image", "key": "icon_tower_tabby", "description": "Icon for Spitfire Tabby tower selection UI: small version of tabby cat" }
 { "type": "image", "key": "tower_slot", "description": "A round stone platform with subtle moss, top-down view" }
 \`\`\``,
+      threed_basic: `**Three.js image asset rules:**
+- Skybox: \`type: "background"\`, key \`skybox_texture\`, equirectangular, \`resolution: "1024*1024"\`.
+- Floor patch/surface: \`type: "image"\`, key \`floor_patch\`; declare runtime \`displaySize\` in the GDD, never pass it to the tool.
+- Collectible billboard: \`type: "image"\`, key \`energy_billboard\`, one centered subject.
+- Keep source/display size <= 1024*1024. Colormap only matte art; never glossy/translucent/emissive/sky art.
+- Every generated image must remain in asset-pack.json. Do not request models, meshes, normal maps, or text-to-3D output.`,
     };
     return guidance[archetype] || '';
   }
@@ -722,6 +742,7 @@ ${this.getSection4Guidance(archetype)}`;
       top_down: 'Entity Architecture (Behavior Composition)',
       grid_logic: 'Entity Architecture (Grid Logic)',
       tower_defense: 'Entity Architecture (Towers & Waves)',
+      threed_basic: '3D Scene Architecture (SceneMap + GameScene)',
     };
     return titles[archetype] || 'Entity Architecture';
   }
@@ -867,6 +888,9 @@ Refer to Design Guide Section 7 for screen shake rules, Template Capabilities Se
   - \`getCellsInRadius(x, y, radius, w, h)\`: cells in area (AoE effects)
 
 **CRITICAL**: Every hook name must exist in template_api.md. Do NOT invent hooks.`,
+      threed_basic: `Define the exact \`SceneMap.ts\` arrays (floorPatches, collectibles, obstacles), the \`GameScene\` texture-key mapping, camera start/bounds, and completion condition.
+
+Use only the public constructor and methods from template_api.md: \`update\`, \`setPaused\`, \`isPaused\`, and \`resize\`. Preserve main.ts RAF and DOM-screen wiring. List exact config fields and values; do not invent editor/runtime hooks.`,
       tower_defense: `Define every tower type, enemy type, and level scene with EXACT configurations. This maps directly to code files.
 
 **For each Tower Type** (COPY \`_TemplateTower.ts\` -> \`TowerName.ts\`):
@@ -932,6 +956,7 @@ if (slowAmt && slowDur) enemy.applyStatusEffect('slow', slowAmt, slowDur, 0x4488
       top_down: 'Level Design',
       grid_logic: 'Level & Puzzle Design (Code-Defined Grid)',
       tower_defense: 'Map & Wave Design',
+      threed_basic: 'Single-Route 3D Level Map',
     };
     return titles[archetype] || 'Level Design';
   }
@@ -1161,6 +1186,14 @@ List which tower types are available in each level. Early levels may restrict to
 - Starting gold: 80-200 (higher = easier)
 - Kill rewards: 5-50g per enemy type
 - Wave clear bonuses: 10-100g per wave`,
+      threed_basic: `**Do not use generate_tilemap.** Provide one declarative route for \`initSceneMap()\`:
+- 8-14 overlapping floor patches with x/z/radius values
+- 5-10 reachable collectibles with id/x/y/z values
+- 8-16 low-poly obstacle decorations outside the main walking line
+- camera start, track bounds, pickup radius, and finish z
+- a manual play path proving every collectible is reachable
+
+End Section 4 with: \`3D scope: primitives + generated image textures; no model generation\`.`,
     };
     return guidance[archetype] || '';
   }
@@ -1271,6 +1304,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
               'grid_logic',
               'tower_defense',
               'ui_heavy',
+              'threed_basic',
             ],
           },
           config_summary: {
@@ -1306,6 +1340,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
       'grid_logic',
       'tower_defense',
       'ui_heavy',
+      'threed_basic',
     ];
     if (!validArchetypes.includes(params.archetype)) {
       return `Invalid archetype: ${params.archetype}. Must be one of: ${validArchetypes.join(', ')}`;
