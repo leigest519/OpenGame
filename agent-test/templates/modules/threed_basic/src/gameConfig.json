@@ -10,11 +10,10 @@
   },
   "playerConfig": {
     "moveSpeed": { "value": 9, "type": "number", "description": "Movement units per second" },
-    "mouseSensitivity": { "value": 0.002, "type": "number", "description": "Mouse look sensitivity" }
+    "mouseSensitivity": { "value": 0.002, "type": "number", "description": "Mouse look sensitivity" },
+    "collisionRadius": { "value": 0.45, "type": "number", "description": "Player radius for XZ collision" }
   },
   "levelConfig": {
-    "trackHalfWidth": { "value": 7, "type": "number", "description": "Half-width of the playable track" },
-    "finishZ": { "value": -78, "type": "number", "description": "End of the main path" },
     "collectRadius": { "value": 1.8, "type": "number", "description": "Manual pickup radius" }
   }
 }
