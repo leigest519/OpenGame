@@ -6,6 +6,7 @@
 |---|---|
 | `src/main.ts` | boots title, runtime, DOM HUD, pause, completion, render loop |
 | `src/GameScene.ts` | owns renderer, scene, camera, world, manual pickup checks |
+| `src/CollisionResolver.ts` | pure XZ road/obstacle movement resolution with substeps |
 | `src/InputController.ts` | keyboard + mouse state only |
 | `src/SceneMap.ts` | Editor-facing declarative positions via `initSceneMap()` |
 | `src/ThreeSceneDefaults.ts` | shared light, fog, and background defaults |
@@ -32,10 +33,15 @@ Required public methods:
 
 ## SceneMap
 
-`initSceneMap()` returns `floorPatches`, `collectibles`, and `obstacles`.
+`initSceneMap()` returns `playerSpawn`, `floorPatches`, `collectibles`, and `obstacles`.
 Change positions there instead of hard-coding level coordinates inside the
 render loop. Add new declarative arrays at the `// EXT` point only when a real
 consumer is implemented.
+
+Each obstacle declares `collisionRadius` independently from visual `scale`.
+`resolveMovement()` keeps the full player circle inside at least one floor
+patch, subdivides long moves to prevent tunnelling, and slides along an
+unblocked axis. Dynamic bodies, impulses, and gravity remain v2 concerns.
 
 ## Texture keys
 

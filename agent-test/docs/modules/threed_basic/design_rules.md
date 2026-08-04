@@ -15,6 +15,7 @@ text-to-3D service. 2D Phaser templates are unrelated and must remain unchanged.
 |---|---|
 | Renderer | `WebGLRenderer`, `PerspectiveCamera`, resize handling, visible non-black frame |
 | World | primitives or custom low-poly geometry, ambient + directional light, fog |
+| Collision | player circle stays on an authored floor patch and outside static obstacle circles |
 | Input | WASD and arrow keys; mouse drag/look; ESC pause |
 | HUD | DOM in `#ui-root`; canvas stays dedicated to three.js |
 | Pause | resolve `gameSceneKey ?? currentLevelKey ?? LevelManager.getFirstLevelScene()` |
@@ -38,7 +39,9 @@ use `colormap` for glossy, translucent, emissive, or sky assets.
 
 Use 8-14 floor patches, 5-10 collectibles, and 8-16 low-poly decorations.
 Keep the camera far plane under 250 and cap device pixel ratio at 2. Manual
-distance checks are enough for pickups; do not introduce a physics dependency.
+distance checks are enough for pickups and static collision; do not introduce a
+physics dependency. Give every obstacle an explicit `collisionRadius` instead
+of deriving gameplay collision from rendered scale.
 
 ## 5. GDD completion notes
 
