@@ -4,6 +4,11 @@ Read this file and every scaffolded `src/` file before editing the generated
 game. Keep the reference lifecycle intact; customize data, materials, text,
 and the one level rather than replacing the shell.
 
+The scaffolded camera-relative movement block, `InputController.dispose()`,
+`GameScene.dispose()`, and the `main.ts` restart call are protected runtime
+contracts. Keep them verbatim while customizing a v1 game; edit `SceneMap`,
+config, materials, text, and win logic around them.
+
 ## Phase 5 implementation order
 
 | Order | Action                                                                    | Done when                                                                                         |
@@ -47,6 +52,8 @@ in the file. Record the final leaf-to-consumer mapping in GDD completion notes.
 Only call `generate_game_assets`. A skybox is a generated 2D equirectangular
 image, floor art is a generated 2D patch/texture, and an energy marker is a
 generated billboard sprite. Do not call shell image tools or any 3D model API.
+Keep returned media as workspace files and consume the `asset-pack.json`
+relative URL; never copy media bytes or Base64/Data URLs into editable files.
 
 If a texture is unavailable, keep the supplied primitive fallback and append
 the fallback key to the GDD Asset Degradation Log. The fallback makes the game
