@@ -41,6 +41,13 @@ export interface GenerateGDDParams {
   config_summary?: string;
 }
 
+export function configMergeInstruction(archetype: GameArchetype): string {
+  if (archetype === 'threed_basic') {
+    return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json`; every leaf must have a runtime consumer, and renamed or superseded leaves must be removed in the same edit.';
+  }
+  return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json` -- add/update game-specific fields using `{ "value": X }` wrapper format, but NEVER delete infrastructure fields (`screenSize`, `renderConfig`, and Phaser\'s `debugConfig`)';
+}
+
 export interface GDDModelConfig {
   apiKey: string;
   baseUrl: string;
@@ -116,7 +123,7 @@ Save content between <gdd-content> tags to \`GAME_DESIGN.md\`
 - Read \`public/assets/asset-pack.json\` for generated texture keys
 
 ### Phase 4: Config (use GDD Section 2)
-- MERGE GDD Section 2 values INTO the existing \`src/gameConfig.json\` -- add/update game-specific fields using \`{ "value": X }\` wrapper format, but NEVER delete infrastructure fields (\`screenSize\`, \`renderConfig\`, and Phaser's \`debugConfig\`)
+${configMergeInstruction(this.params.archetype)}
 
 ### Phase 5: Code Implementation (use GDD Sections 0, 3, 5)
 - **GDD Section 0** has scene keys -> update \`LevelManager.ts\` and \`main.ts\`
