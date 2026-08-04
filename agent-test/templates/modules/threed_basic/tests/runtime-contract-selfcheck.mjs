@@ -45,5 +45,7 @@ assert.match(coreMain, /this\.game\?\.dispose\(\)/);
 assert.match(coreScene, /this\.renderer\.dispose\(\)/);
 assert.match(manual, /protected runtime\s+contracts/);
 assert.match(manual, /asset-pack\.json[\s\S]*relative URL/);
+assert.match(manual, /Baseline evidence:[\s\S]*SHA-256[\s\S]*diff result/);
+assert.match(manual, /generated edit that was reverted, not a[\s\S]*template defect/);
 
 console.log('threed_basic runtime contract self-check: PASS');
