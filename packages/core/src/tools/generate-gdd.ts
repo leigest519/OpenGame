@@ -50,7 +50,7 @@ export function configMergeInstruction(archetype: GameArchetype): string {
 
 export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
   if (archetype !== 'threed_basic') return '';
-  return '5. **3D Mechanic Fidelity**: Preserve explicit gameplay semantics such as ordered or sequential objectives. Public API limits forbid new external hooks, not private state inside `GameScene`; never weaken the user requirement to match the scaffold pickup loop.';
+  return '5. **3D Mechanic Fidelity**: Preserve explicit gameplay semantics such as ordered or sequential objectives. Public API limits forbid new external hooks, not private state inside `GameScene`; never weaken the user requirement to match the scaffold pickup loop. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
 }
 
 export interface GDDModelConfig {
