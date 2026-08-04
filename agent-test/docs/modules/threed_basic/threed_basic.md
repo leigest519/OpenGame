@@ -10,7 +10,7 @@ and the one level rather than replacing the shell.
 |---|---|---|
 | 1 | map GDD asset keys to `skybox_texture`, `floor_patch`, `energy_billboard` | every used key exists in `asset-pack.json` |
 | 2 | edit `SceneMap.ts` | main route and every pickup are reachable; obstacle collision radii leave a traversable lane |
-| 3 | merge tuning into `gameConfig.json` | wrapper shape and core fields remain |
+| 3 | merge tuning into `gameConfig.json` | every leaf has one runtime consumer; superseded aliases are deleted |
 | 4 | theme materials and DOM text | canvas remains WebGL-only; HUD remains DOM-only |
 | 5 | run build and smoke | zero errors, non-black canvas, WebGL context, ESC resume |
 
@@ -30,6 +30,12 @@ moving after resume.
 Keep `CollisionResolver.ts` pure. Floor patches and obstacle circles come from
 `SceneMap.ts`; player radius comes from `gameConfig.json`. Do not replace this
 with a physics dependency in v1.
+
+Treat config as executable data. Keep the existing path when it already serves
+the intended value; if a generated design chooses a new path, update the code
+and remove the old path together. Never add `fogDensity`, a second pickup
+radius, or a duplicate collectible count while their existing equivalents stay
+in the file. Record the final leaf-to-consumer mapping in GDD completion notes.
 
 ## Asset hookup
 
@@ -58,4 +64,5 @@ playable; it does not authorize skipping the required asset call.
 | image 404s | invented key or leading slash mismatch | read the generated `asset-pack.json`; use its key/url |
 | movement depends on frame rate | raw per-frame displacement | multiply by capped `deltaSeconds` |
 | player leaves the road or crosses a pylon | movement bypasses `resolveMovement` or collision radii are missing | route every XZ move through the resolver and keep SceneMap radii explicit |
+| acceptance reports dead config | a field was copied or renamed without removing its old path | keep one canonical leaf, update its consumer, and delete the duplicate |
 | huge GPU cost | uncapped DPR or oversized textures | DPR <= 2; texture/display size <= 1024 squared |
