@@ -29,7 +29,12 @@ Required public methods:
 | `update(deltaSeconds)` | advance input, collection, animation, and render |
 | `setPaused(boolean)` | stop/resume simulation and clear held input |
 | `isPaused()` | smoke/lifecycle observable pause state |
+| `dispose()` | unbind input and release scene-owned geometry, material, renderer, and canvas resources before instance replacement |
 | `resize()` | update camera aspect and renderer size |
+
+`GameScene.dispose()` owns input listeners, geometry, materials, renderer state,
+and its canvas. `Preloader` owns the shared texture map, so scene replacement
+must not dispose those textures before the next scene reuses them.
 
 ## Smoke bridge
 
