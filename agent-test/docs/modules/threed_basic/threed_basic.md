@@ -20,6 +20,13 @@ config, materials, text, and win logic around them.
 | 5     | run build and smoke                                                       | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only          |
 | 6     | reconcile `GAME_DESIGN.md` after the final uninstrumented playthrough     | the GDD body, config, asset-pack, SceneMap, and observed win condition state one consistent truth |
 
+Do not attribute a defect or fix to the scaffold, template, or frozen baseline
+from memory. Compare the final file with the exact scaffold source first. Any
+such GDD claim must include `Baseline evidence:` with the canonical source
+path, its SHA-256, and the relevant diff result. If the protected block already
+matches, describe the incident as a generated edit that was reverted, not a
+template defect.
+
 ## Runtime lifecycle
 
 ```text
@@ -85,4 +92,5 @@ to make this check pass.
 | acceptance reports dead config                                        | a field was copied or renamed without removing its old path                      | keep one canonical leaf, update its consumer, and delete the duplicate                      |
 | completion notes contradict the GDD body                              | Phase 6 appended differences without correcting stale design values              | reconcile the body in place, then keep the appendix only as change rationale                |
 | GDD names a Set, mesh coordinate, or UV behavior absent from source   | Phase 6 rewrote prose from memory instead of the final consumer                  | copy the detail from final source or remove it and keep only stable player-visible behavior |
+| GDD blames a template block that already matches the frozen baseline  | Phase 6 inferred provenance from its own edit history instead of a baseline diff | record path + SHA-256 + diff evidence, or attribute the reverted edit to this generated game |
 | huge GPU cost                                                         | uncapped DPR or oversized textures                                               | DPR <= 2; texture/display size <= 1024 squared                                              |
