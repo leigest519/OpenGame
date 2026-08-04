@@ -31,6 +31,7 @@ for (const yaw of [-Math.PI, -Math.PI / 2, 0, Math.PI / 2, Math.PI]) {
 assert.match(moduleScene, /x: \(-sin \* forward \+ cos \* strafe\)/);
 assert.match(moduleScene, /z: \(-cos \* forward - sin \* strafe\)/);
 assert.match(coreScene, /Math\.cos\(this\.yaw\) \* strafe - Math\.sin\(this\.yaw\) \* forward/);
+assert.match(coreScene, /-Math\.sin\(this\.yaw\) \* strafe - Math\.cos\(this\.yaw\) \* forward/);
 assert.doesNotMatch(moduleScene, /\+ Math\.sin\(this\.yaw\) \* forward/);
 assert.match(moduleInput, /dispose\(\): void/);
 assert.match(moduleScene, /this\.input\.dispose\(\)/);

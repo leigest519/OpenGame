@@ -119,7 +119,7 @@ export class GameScene {
     this.camera.position.x +=
       (Math.cos(this.yaw) * strafe - Math.sin(this.yaw) * forward) * speed;
     this.camera.position.z +=
-      (Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed;
+      (-Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed;
     this.camera.position.x = Math.max(-8, Math.min(8, this.camera.position.x));
     this.camera.position.z = Math.max(-78, Math.min(8, this.camera.position.z));
     this.camera.rotation.y = this.yaw;
