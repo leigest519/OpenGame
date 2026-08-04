@@ -43,6 +43,16 @@ Each obstacle declares `collisionRadius` independently from visual `scale`.
 patch, subdivides long moves to prevent tunnelling, and slides along an
 unblocked axis. Dynamic bodies, impulses, and gravity remain v2 concerns.
 
+## Config ownership
+
+The shipped config is a starting contract, not a compatibility registry. Keep
+one leaf per runtime value and require a literal consumer for every leaf. When
+renaming or regrouping a field, update its consumer and delete the old field in
+the same change. Do not preserve unused 2D infrastructure fields in a 3D game.
+
+Before build, search every config leaf outside `gameConfig.json`. A leaf with no
+consumer is a failed implementation check, not a harmless preset.
+
 ## Texture keys
 
 `Preloader` reads Phaser-compatible `asset-pack.json` sections and loads image

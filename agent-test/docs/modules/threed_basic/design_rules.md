@@ -43,11 +43,20 @@ distance checks are enough for pickups and static collision; do not introduce a
 physics dependency. Give every obstacle an explicit `collisionRadius` instead
 of deriving gameplay collision from rendered scale.
 
+Every `gameConfig.json` leaf must have one literal runtime consumer. Do not keep
+aliases for the same value: if pickup code moves from
+`levelConfig.collectRadius` to another path, delete the old leaf in the same
+edit. The current linear fog consumes `renderConfig.fogNear` and `fogFar`; do
+not add `fogDensity` unless the implementation changes and the superseded
+linear-fog leaves are removed. Derive authored counts from `SceneMap` arrays
+unless a separately consumed completion threshold is required.
+
 ## 5. GDD completion notes
 
 The GDD must end with:
 
 - the actual generated keys and their runtime consumers;
+- a config leaf-to-consumer table with no duplicate or unconsumed leaf;
 - any placeholder/fallback used;
 - `3D scope: primitives + generated image textures; no model generation`;
 - the command evidence from build and smoke.
