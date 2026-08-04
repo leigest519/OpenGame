@@ -17,6 +17,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import gameConfig from './gameConfig.json';
+import { resolveMovement } from './CollisionResolver';
 import { InputController } from './InputController';
 import { initSceneMap } from './SceneMap';
 import { applyThreeSceneDefaults } from './ThreeSceneDefaults';
@@ -32,6 +33,7 @@ export class GameScene {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera(65, 1, 0.1, 200);
   private readonly input: InputController;
+  private readonly map = initSceneMap();
   private readonly collectibles: Object3D[] = [];
   private paused = false;
   private completed = false;
@@ -65,7 +67,6 @@ export class GameScene {
       this.scene.background = skybox;
     }
 
-    const map = initSceneMap();
     const floorTexture = this.textures.get('floor_patch');
     if (floorTexture) floorTexture.colorSpace = SRGBColorSpace;
     const floorMaterial = new MeshStandardMaterial({
@@ -73,7 +74,7 @@ export class GameScene {
       map: floorTexture,
       roughness: 0.92,
     });
-    for (const patch of map.floorPatches) {
+    for (const patch of this.map.floorPatches) {
       const floor = new Mesh(
         new CircleGeometry(patch.radius, 20),
         floorMaterial,
@@ -88,7 +89,7 @@ export class GameScene {
       emissive: new Color(0x21084f),
       flatShading: true,
     });
-    for (const obstacle of map.obstacles) {
+    for (const obstacle of this.map.obstacles) {
       const mesh = new Mesh(new IcosahedronGeometry(obstacle.scale, 0), obstacleMaterial);
       mesh.position.set(obstacle.x, obstacle.y, obstacle.z);
       this.scene.add(mesh);
@@ -96,7 +97,7 @@ export class GameScene {
 
     const energyTexture = this.textures.get('energy_billboard');
     if (energyTexture) energyTexture.colorSpace = SRGBColorSpace;
-    for (const item of map.collectibles) {
+    for (const item of this.map.collectibles) {
       const collectible = energyTexture
         ? new Sprite(new SpriteMaterial({ map: energyTexture, transparent: true }))
         : new Mesh(
@@ -109,7 +110,11 @@ export class GameScene {
       this.collectibles.push(collectible);
       this.scene.add(collectible);
     }
-    this.camera.position.set(0, 2.2, 7);
+    this.camera.position.set(
+      this.map.playerSpawn.x,
+      2.2,
+      this.map.playerSpawn.z,
+    );
   }
 
   update(deltaSeconds: number): void {
@@ -118,18 +123,17 @@ export class GameScene {
       this.input.consumeLookDelta() * gameConfig.playerConfig.mouseSensitivity.value;
     const { forward, strafe } = this.input.movement();
     const speed = gameConfig.playerConfig.moveSpeed.value * deltaSeconds;
-    this.camera.position.x +=
-      (Math.cos(this.yaw) * strafe + Math.sin(this.yaw) * forward) * speed;
-    this.camera.position.z +=
-      (Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed;
-    this.camera.position.x = Math.max(
-      -gameConfig.levelConfig.trackHalfWidth.value,
-      Math.min(gameConfig.levelConfig.trackHalfWidth.value, this.camera.position.x),
+    const nextPosition = resolveMovement(
+      { x: this.camera.position.x, z: this.camera.position.z },
+      {
+        x: (Math.cos(this.yaw) * strafe + Math.sin(this.yaw) * forward) * speed,
+        z: (Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed,
+      },
+      gameConfig.playerConfig.collisionRadius.value,
+      this.map,
     );
-    this.camera.position.z = Math.max(
-      gameConfig.levelConfig.finishZ.value,
-      Math.min(8, this.camera.position.z),
-    );
+    this.camera.position.x = nextPosition.x;
+    this.camera.position.z = nextPosition.z;
     this.camera.rotation.y = this.yaw;
 
     for (const collectible of [...this.collectibles]) {
