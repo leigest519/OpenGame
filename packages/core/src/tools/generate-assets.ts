@@ -20,6 +20,7 @@ import {
 import type { Config } from '../config/config.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import sharp from 'sharp';
 
 import type { ModelRouter } from '../services/assetModelRouter.js';
 import { createModelRouter } from '../services/assetModelRouter.js';
@@ -42,6 +43,51 @@ import { TilesetProcessor } from '../services/tileset-processor.js';
 // ============== Constants ==============
 
 const MAX_CONCURRENCY = 2;
+const DEFAULT_IMAGE_SIZE = '1024*1024';
+
+export type ImageNormalization = {
+  width: number;
+  height: number;
+  fit: 'contain' | 'cover';
+};
+
+export function parseImageSize(
+  size: string,
+): Pick<ImageNormalization, 'width' | 'height'> {
+  const match = /^(\d+)[*x](\d+)$/.exec(size);
+  if (!match) throw new Error(`Invalid image size: ${size}`);
+  return { width: Number(match[1]), height: Number(match[2]) };
+}
+
+export async function normalizeImageBuffer(
+  buffer: Buffer,
+  spec: ImageNormalization,
+): Promise<Buffer> {
+  const image = sharp(buffer);
+  const metadata = await image.metadata();
+  if (
+    metadata.format === 'png' &&
+    metadata.width === spec.width &&
+    metadata.height === spec.height
+  ) {
+    return buffer;
+  }
+  return image
+    .resize(spec.width, spec.height, {
+      fit: spec.fit,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png({
+      compressionLevel: 9,
+      adaptiveFiltering: true,
+    })
+    .toBuffer();
+}
+
+const DEFAULT_SPRITE_NORMALIZATION: ImageNormalization = {
+  ...parseImageSize(DEFAULT_IMAGE_SIZE),
+  fit: 'contain',
+};
 
 // ============== Invocation Class ==============
 
@@ -262,12 +308,13 @@ CODING INSTRUCTION (Phaser 3):
       PURE SCENERY ONLY - landscape, buildings, environment, sky, etc.
     `;
 
-    const imageUrl = await this.modelRouter.generateImage(
-      prompt,
-      req.resolution || '1024*1024',
-    );
+    const resolution = req.resolution || DEFAULT_IMAGE_SIZE;
+    const imageUrl = await this.modelRouter.generateImage(prompt, resolution);
     const buffer = await this.downloadImage(imageUrl);
-    const cdnUrl = await this.saveAsset(buffer, req.key, assetsDir);
+    const cdnUrl = await this.saveAsset(buffer, req.key, assetsDir, 'png', {
+      ...parseImageSize(resolution),
+      fit: 'cover',
+    });
 
     this.updateAssetPack(assetPack, req.key, 'background', cdnUrl);
   }
@@ -291,12 +338,18 @@ CODING INSTRUCTION (Phaser 3):
 
     const imageUrl = await this.modelRouter.generateImage(
       prompt,
-      req.size || '1024*1024',
+      req.size || DEFAULT_IMAGE_SIZE,
     );
 
     // Remove background
     const buffer = await this.bgRemovalService.removeBackgroundSafe(imageUrl);
-    const cdnUrl = await this.saveAsset(buffer, req.key, assetsDir);
+    const cdnUrl = await this.saveAsset(
+      buffer,
+      req.key,
+      assetsDir,
+      'png',
+      DEFAULT_SPRITE_NORMALIZATION,
+    );
 
     this.updateAssetPack(assetPack, req.key, 'image', cdnUrl);
   }
@@ -322,14 +375,20 @@ CODING INSTRUCTION (Phaser 3):
 
     const baseImageUrl = await this.modelRouter.generateImage(
       basePrompt,
-      '1024*1024',
+      DEFAULT_IMAGE_SIZE,
     );
 
     // Save base/idle frame
     const baseKey = `${req.key}_idle_01`;
     const baseBuffer =
       await this.bgRemovalService.removeBackgroundSafe(baseImageUrl);
-    const baseCdnUrl = await this.saveAsset(baseBuffer, baseKey, assetsDir);
+    const baseCdnUrl = await this.saveAsset(
+      baseBuffer,
+      baseKey,
+      assetsDir,
+      'png',
+      DEFAULT_SPRITE_NORMALIZATION,
+    );
     this.updateAssetPack(assetPack, baseKey, 'animation', baseCdnUrl);
 
     // Step 2: Generate animation frames
@@ -480,6 +539,8 @@ CODING INSTRUCTION (Phaser 3):
             processedBuffer,
             frameKey,
             assetsDir,
+            'png',
+            DEFAULT_SPRITE_NORMALIZATION,
           );
           this.updateAssetPack(assetPack, frameKey, 'animation', frameCdnUrl);
 
@@ -648,6 +709,8 @@ CODING INSTRUCTION (Phaser 3):
         frameBuffer,
         frameKey,
         assetsDir,
+        'png',
+        DEFAULT_SPRITE_NORMALIZATION,
       );
       this.updateAssetPack(assetPack, frameKey, 'animation', frameCdnUrl);
 
@@ -894,7 +957,10 @@ isometric, 3D, perspective, vignette, dark corners.
     key: string,
     assetsDir: string,
     extension: string = 'png',
+    normalization?: ImageNormalization,
   ): Promise<string> {
+    if (normalization)
+      buffer = await normalizeImageBuffer(buffer, normalization);
     const filename = `${key}.${extension}`;
     const filePath = path.join(assetsDir, filename);
     await fs.writeFile(filePath, buffer);
