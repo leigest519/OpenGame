@@ -6,14 +6,14 @@ and the one level rather than replacing the shell.
 
 ## Phase 5 implementation order
 
-| Order | Action | Done when |
-|---|---|---|
-| 1 | map GDD asset keys to `skybox_texture`, `floor_patch`, `energy_billboard` | every used key exists in `asset-pack.json` |
-| 2 | edit `SceneMap.ts` | main route and every pickup are reachable; obstacle collision radii leave a traversable lane |
-| 3 | merge tuning into `gameConfig.json` | every leaf has one runtime consumer; superseded aliases are deleted |
-| 4 | theme materials and DOM text | canvas remains WebGL-only; HUD remains DOM-only |
-| 5 | run build and smoke | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only |
-| 6 | reconcile `GAME_DESIGN.md` after the final uninstrumented playthrough | the GDD body, config, asset-pack, SceneMap, and observed win condition state one consistent truth |
+| Order | Action                                                                    | Done when                                                                                         |
+| ----- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1     | map GDD asset keys to `skybox_texture`, `floor_patch`, `energy_billboard` | every used key exists in `asset-pack.json`                                                        |
+| 2     | edit `SceneMap.ts`                                                        | main route and every pickup are reachable; obstacle collision radii leave a traversable lane      |
+| 3     | merge tuning into `gameConfig.json`                                       | every leaf has one runtime consumer; superseded aliases are deleted                               |
+| 4     | theme materials and DOM text                                              | canvas remains WebGL-only; HUD remains DOM-only                                                   |
+| 5     | run build and smoke                                                       | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only          |
+| 6     | reconcile `GAME_DESIGN.md` after the final uninstrumented playthrough     | the GDD body, config, asset-pack, SceneMap, and observed win condition state one consistent truth |
 
 ## Runtime lifecycle
 
@@ -66,15 +66,16 @@ to make this check pass.
 
 ## Frequent failures
 
-| Symptom | Root cause | Fix |
-|---|---|---|
-| black canvas, no console error | level never rendered after title | keep the RAF loop and call `renderer.render` every active frame |
-| ESC overlay opens but game stays paused | wrong scene key | use the three-key fallback contract exactly |
-| image 404s | invented key or leading slash mismatch | read the generated `asset-pack.json`; use its key/url |
-| movement depends on frame rate | raw per-frame displacement | multiply by capped `deltaSeconds` |
-| W moves opposite the camera's horizontal X direction after mouse look | the forward vector uses `+sin(yaw)` while three.js camera forward is `-sin(yaw)` | use `(-sin(yaw), -cos(yaw))` for forward and `(cos(yaw), -sin(yaw))` for right |
-| a second run accumulates listeners or GPU resources | the previous scene instance was replaced without `dispose()` | call `dispose()` before rebuilding and keep textures under Preloader ownership |
-| player leaves the road or crosses a pylon | movement bypasses `resolveMovement` or collision radii are missing | route every XZ move through the resolver and keep SceneMap radii explicit |
-| acceptance reports dead config | a field was copied or renamed without removing its old path | keep one canonical leaf, update its consumer, and delete the duplicate |
-| completion notes contradict the GDD body | Phase 6 appended differences without correcting stale design values | reconcile the body in place, then keep the appendix only as change rationale |
-| huge GPU cost | uncapped DPR or oversized textures | DPR <= 2; texture/display size <= 1024 squared |
+| Symptom                                                               | Root cause                                                                       | Fix                                                                                         |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| black canvas, no console error                                        | level never rendered after title                                                 | keep the RAF loop and call `renderer.render` every active frame                             |
+| ESC overlay opens but game stays paused                               | wrong scene key                                                                  | use the three-key fallback contract exactly                                                 |
+| image 404s                                                            | invented key or leading slash mismatch                                           | read the generated `asset-pack.json`; use its key/url                                       |
+| movement depends on frame rate                                        | raw per-frame displacement                                                       | multiply by capped `deltaSeconds`                                                           |
+| W moves opposite the camera's horizontal X direction after mouse look | the forward vector uses `+sin(yaw)` while three.js camera forward is `-sin(yaw)` | use `(-sin(yaw), -cos(yaw))` for forward and `(cos(yaw), -sin(yaw))` for right              |
+| a second run accumulates listeners or GPU resources                   | the previous scene instance was replaced without `dispose()`                     | call `dispose()` before rebuilding and keep textures under Preloader ownership              |
+| player leaves the road or crosses a pylon                             | movement bypasses `resolveMovement` or collision radii are missing               | route every XZ move through the resolver and keep SceneMap radii explicit                   |
+| acceptance reports dead config                                        | a field was copied or renamed without removing its old path                      | keep one canonical leaf, update its consumer, and delete the duplicate                      |
+| completion notes contradict the GDD body                              | Phase 6 appended differences without correcting stale design values              | reconcile the body in place, then keep the appendix only as change rationale                |
+| GDD names a Set, mesh coordinate, or UV behavior absent from source   | Phase 6 rewrote prose from memory instead of the final consumer                  | copy the detail from final source or remove it and keep only stable player-visible behavior |
+| huge GPU cost                                                         | uncapped DPR or oversized textures                                               | DPR <= 2; texture/display size <= 1024 squared                                              |
