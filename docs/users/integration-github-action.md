@@ -1,4 +1,4 @@
-# Github Actions：qwen-code-action
+# Github Actions: qwen-code-action
 
 ## Overview
 
