@@ -41,6 +41,7 @@ class GameApp {
 
   private start(): void {
     if (!this.container) return;
+    this.ended = false;
     this.game = new GameScene(
       this.container,
       {
@@ -48,12 +49,12 @@ class GameApp {
         onComplete: () => {
           this.ended = true;
           this.game?.setPaused(true);
-          this.completeUi.show(() => location.reload());
+          this.completeUi.show(() => this.restart());
         },
         onGameOver: () => {
           this.ended = true;
           this.game?.setPaused(true);
-          this.gameOverUi.show(() => location.reload());
+          this.gameOverUi.show(() => this.restart());
         },
       },
       this.preloader.textures,
@@ -78,6 +79,13 @@ class GameApp {
       this.pauseUi.hide();
       this.game?.setPaused(false);
     }
+  }
+
+  private restart(): void {
+    this.pauseUi.hide();
+    this.game?.dispose();
+    this.game = undefined;
+    this.start();
   }
 
   private readonly frame = (time: number): void => {

@@ -4,6 +4,7 @@ import {
   Color,
   DirectionalLight,
   Fog,
+  Material,
   Mesh,
   MeshStandardMaterial,
   PerspectiveCamera,
@@ -116,9 +117,9 @@ export class GameScene {
       Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft'));
     const speed = gameConfig.playerConfig.moveSpeed.value * deltaSeconds;
     this.camera.position.x +=
-      (Math.cos(this.yaw) * strafe + Math.sin(this.yaw) * forward) * speed;
+      (Math.cos(this.yaw) * strafe - Math.sin(this.yaw) * forward) * speed;
     this.camera.position.z +=
-      (Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed;
+      (-Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed;
     this.camera.position.x = Math.max(-8, Math.min(8, this.camera.position.x));
     this.camera.position.z = Math.max(-78, Math.min(8, this.camera.position.z));
     this.camera.rotation.y = this.yaw;
@@ -132,6 +133,24 @@ export class GameScene {
 
   isPaused(): boolean {
     return this.paused;
+  }
+
+  dispose(): void {
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
+    this.renderer.domElement.removeEventListener('pointerdown', this.onPointerDown);
+    window.removeEventListener('pointerup', this.onPointerUp);
+    window.removeEventListener('pointermove', this.onPointerMove);
+    this.scene.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      object.geometry.dispose();
+      const materials: Material[] = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      for (const material of materials) material.dispose();
+    });
+    this.renderer.dispose();
+    this.renderer.domElement.remove();
   }
 
   resize(): void {

@@ -69,6 +69,11 @@ The GDD must end with:
 - `3D scope: primitives + generated image textures; no model generation`;
 - the command evidence from build and smoke.
 
+After Phase 6 changes, reconcile the GDD body itself against the final
+`SceneMap`, config, asset-pack, and uninstrumented playthrough. Correct stale
+numbers and consumers in place; an appendix may explain why a value changed,
+but must not leave an older contradictory value as a second truth.
+
 ## 6. Verification integrity
 
 Acceptance must test the declared win condition without strengthening or
