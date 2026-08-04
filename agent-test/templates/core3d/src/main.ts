@@ -23,6 +23,7 @@ class GameApp {
   private readonly gameOverUi = new GameOverUIScene();
   private game?: GameScene;
   private lastFrame = performance.now();
+  private ended = false;
 
   async boot(): Promise<void> {
     if (!this.container) throw new Error('Missing #game-container');
@@ -30,7 +31,7 @@ class GameApp {
     this.title.show(() => this.start());
     window.addEventListener('resize', () => this.game?.resize());
     window.addEventListener('keydown', (event) => {
-      if (event.code === 'Escape' && this.game) {
+      if (event.code === 'Escape' && this.game && !event.repeat && !this.ended) {
         if (this.game.isPaused()) this.resume('GameScene');
         else this.pause('GameScene');
       }
@@ -45,10 +46,12 @@ class GameApp {
       {
         onProgress: (collected, total) => this.ui.update(collected, total),
         onComplete: () => {
+          this.ended = true;
           this.game?.setPaused(true);
           this.completeUi.show(() => location.reload());
         },
         onGameOver: () => {
+          this.ended = true;
           this.game?.setPaused(true);
           this.gameOverUi.show(() => location.reload());
         },
