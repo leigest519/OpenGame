@@ -9,7 +9,7 @@ and the one level rather than replacing the shell.
 | Order | Action | Done when |
 |---|---|---|
 | 1 | map GDD asset keys to `skybox_texture`, `floor_patch`, `energy_billboard` | every used key exists in `asset-pack.json` |
-| 2 | edit `SceneMap.ts` | main route and every pickup are reachable |
+| 2 | edit `SceneMap.ts` | main route and every pickup are reachable; obstacle collision radii leave a traversable lane |
 | 3 | merge tuning into `gameConfig.json` | wrapper shape and core fields remain |
 | 4 | theme materials and DOM text | canvas remains WebGL-only; HUD remains DOM-only |
 | 5 | run build and smoke | zero errors, non-black canvas, WebGL context, ESC resume |
@@ -19,13 +19,17 @@ and the one level rather than replacing the shell.
 ```text
 Preloader.load -> TitleScreen.show -> GameScene constructor
   -> applyThreeSceneDefaults -> initSceneMap -> HUD.show
-  -> requestAnimationFrame -> GameScene.update -> renderer.render
+  -> requestAnimationFrame -> GameScene.update -> resolveMovement -> renderer.render
   -> all collectibles removed -> onComplete -> GameCompleteUIScene
 ```
 
 `deltaSeconds` is capped by `main.ts`; all movement must multiply by it.
 `setPaused(true)` must clear input so a key held before pause cannot continue
 moving after resume.
+
+Keep `CollisionResolver.ts` pure. Floor patches and obstacle circles come from
+`SceneMap.ts`; player radius comes from `gameConfig.json`. Do not replace this
+with a physics dependency in v1.
 
 ## Asset hookup
 
@@ -53,4 +57,5 @@ playable; it does not authorize skipping the required asset call.
 | ESC overlay opens but game stays paused | wrong scene key | use the three-key fallback contract exactly |
 | image 404s | invented key or leading slash mismatch | read the generated `asset-pack.json`; use its key/url |
 | movement depends on frame rate | raw per-frame displacement | multiply by capped `deltaSeconds` |
+| player leaves the road or crosses a pylon | movement bypasses `resolveMovement` or collision radii are missing | route every XZ move through the resolver and keep SceneMap radii explicit |
 | huge GPU cost | uncapped DPR or oversized textures | DPR <= 2; texture/display size <= 1024 squared |
