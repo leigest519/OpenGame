@@ -17,6 +17,10 @@ const coreMain = await readFile(
   new URL('../../../core3d/src/main.ts', import.meta.url),
   'utf8',
 );
+const manual = await readFile(
+  new URL('../../../../docs/modules/threed_basic/threed_basic.md', import.meta.url),
+  'utf8',
+);
 
 const movement = (yaw, forward, strafe) => ({
   x: -Math.sin(yaw) * forward + Math.cos(yaw) * strafe,
@@ -39,5 +43,7 @@ assert.match(moduleScene, /object\.geometry\.dispose\(\)/);
 assert.match(moduleScene, /material\.dispose\(\)/);
 assert.match(coreMain, /this\.game\?\.dispose\(\)/);
 assert.match(coreScene, /this\.renderer\.dispose\(\)/);
+assert.match(manual, /protected runtime\s+contracts/);
+assert.match(manual, /asset-pack\.json[\s\S]*relative URL/);
 
 console.log('threed_basic runtime contract self-check: PASS');
