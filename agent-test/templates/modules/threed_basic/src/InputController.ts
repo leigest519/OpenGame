@@ -3,10 +3,10 @@ export class InputController {
   private dragging = false;
   private lookDelta = 0;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(private readonly canvas: HTMLCanvasElement) {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
-    canvas.addEventListener('mousedown', this.onMouseDown);
+    this.canvas.addEventListener('mousedown', this.onMouseDown);
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
   }
@@ -31,6 +31,15 @@ export class InputController {
   clear(): void {
     this.keys.clear();
     this.lookDelta = 0;
+  }
+
+  dispose(): void {
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
+    this.canvas.removeEventListener('mousedown', this.onMouseDown);
+    window.removeEventListener('mouseup', this.onMouseUp);
+    window.removeEventListener('mousemove', this.onMouseMove);
+    this.clear();
   }
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {

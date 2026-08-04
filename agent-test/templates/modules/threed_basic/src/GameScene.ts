@@ -3,6 +3,7 @@ import {
   Color,
   EquirectangularReflectionMapping,
   IcosahedronGeometry,
+  Material,
   Mesh,
   MeshStandardMaterial,
   Object3D,
@@ -123,11 +124,13 @@ export class GameScene {
       this.input.consumeLookDelta() * gameConfig.playerConfig.mouseSensitivity.value;
     const { forward, strafe } = this.input.movement();
     const speed = gameConfig.playerConfig.moveSpeed.value * deltaSeconds;
+    const sin = Math.sin(this.yaw);
+    const cos = Math.cos(this.yaw);
     const nextPosition = resolveMovement(
       { x: this.camera.position.x, z: this.camera.position.z },
       {
-        x: (Math.cos(this.yaw) * strafe + Math.sin(this.yaw) * forward) * speed,
-        z: (Math.sin(this.yaw) * strafe - Math.cos(this.yaw) * forward) * speed,
+        x: (-sin * forward + cos * strafe) * speed,
+        z: (-cos * forward - sin * strafe) * speed,
       },
       gameConfig.playerConfig.collisionRadius.value,
       this.map,
@@ -162,6 +165,20 @@ export class GameScene {
 
   isPaused(): boolean {
     return this.paused;
+  }
+
+  dispose(): void {
+    this.input.dispose();
+    this.scene.traverse((object) => {
+      if (object instanceof Mesh) object.geometry.dispose();
+      if (!(object instanceof Mesh || object instanceof Sprite)) return;
+      const materials: Material[] = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      for (const material of materials) material.dispose();
+    });
+    this.renderer.dispose();
+    this.renderer.domElement.remove();
   }
 
   resize(): void {
