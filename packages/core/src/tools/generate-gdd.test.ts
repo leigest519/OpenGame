@@ -32,6 +32,14 @@ describe('gameplaySemanticsInstruction', () => {
     expect(instruction).toContain('ordered or sequential objectives');
     expect(instruction).toContain('private state inside `GameScene`');
     expect(instruction).toContain('never weaken the user requirement');
+    expect(instruction).toContain(
+      'never strengthen, replace, or contradict it',
+    );
+    expect(instruction).toContain(
+      'optional objectives must not become pass gates',
+    );
+    expect(instruction).toContain('final uninstrumented artifact');
+    expect(instruction).toContain('probes must not be a prerequisite for PASS');
     expect(gameplaySemanticsInstruction('platformer')).toBe('');
     expect(gameplaySemanticsInstruction('top_down')).toBe('');
   });
