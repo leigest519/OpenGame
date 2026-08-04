@@ -16,26 +16,26 @@ public API and implement the requested rule with the smallest private state in
 
 ## 2. Required runtime contract
 
-| Area | Required |
-|---|---|
-| Renderer | `WebGLRenderer`, `PerspectiveCamera`, resize handling, visible non-black frame |
-| World | primitives or custom low-poly geometry, ambient + directional light, fog |
+| Area      | Required                                                                           |
+| --------- | ---------------------------------------------------------------------------------- |
+| Renderer  | `WebGLRenderer`, `PerspectiveCamera`, resize handling, visible non-black frame     |
+| World     | primitives or custom low-poly geometry, ambient + directional light, fog           |
 | Collision | player circle stays on an authored floor patch and outside static obstacle circles |
-| Input | WASD and arrow keys; mouse drag/look; ESC pause |
-| HUD | DOM in `#ui-root`; canvas stays dedicated to three.js |
-| Pause | resolve `gameSceneKey ?? currentLevelKey ?? LevelManager.getFirstLevelScene()` |
-| Win | one explicit, reachable completion condition |
+| Input     | WASD and arrow keys; mouse drag/look; ESC pause                                    |
+| HUD       | DOM in `#ui-root`; canvas stays dedicated to three.js                              |
+| Pause     | resolve `gameSceneKey ?? currentLevelKey ?? LevelManager.getFirstLevelScene()`     |
+| Win       | one explicit, reachable completion condition                                       |
 
 ## 3. Asset registry rules
 
 3D assets are still ordinary images produced by `generate_game_assets`.
 
-| Key role | Tool type | Max/source rule | three.js use |
-|---|---|---|---|
-| `skybox_texture` | `background` | `1024*1024`; `displaySize: 1024*1024` in GDD | equirectangular scene background |
-| `floor_patch` | `image` | generated image; declare display size <= `1024*1024` | `CircleGeometry` material map |
-| `energy_billboard` | `image` | one centered subject, transparent removal allowed | `SpriteMaterial` |
-| surface texture | `image` | <= `1024*1024`; no glossy colormap | `MeshStandardMaterial.map` |
+| Key role           | Tool type    | Max/source rule                                      | three.js use                     |
+| ------------------ | ------------ | ---------------------------------------------------- | -------------------------------- |
+| `skybox_texture`   | `background` | `1024*1024`; `displaySize: 1024*1024` in GDD         | equirectangular scene background |
+| `floor_patch`      | `image`      | generated image; declare display size <= `1024*1024` | `CircleGeometry` material map    |
+| `energy_billboard` | `image`      | one centered subject, transparent removal allowed    | `SpriteMaterial`                 |
+| surface texture    | `image`      | <= `1024*1024`; no glossy colormap                   | `MeshStandardMaterial.map`       |
 
 Never request a model, mesh, GLB, FBX, normal map, or text-to-3D output. Do not
 use `colormap` for glossy, translucent, emissive, or sky assets.
@@ -73,6 +73,12 @@ After Phase 6 changes, reconcile the GDD body itself against the final
 `SceneMap`, config, asset-pack, and uninstrumented playthrough. Correct stale
 numbers and consumers in place; an appendix may explain why a value changed,
 but must not leave an older contradictory value as a second truth.
+
+Implementation details need source anchors, not memory. Before keeping an
+internal variable name, numeric mesh position, or texture behavior such as UV
+repeat in the GDD, copy it from the final runtime source and verify that exact
+consumer still exists. Otherwise state only the stable player-visible behavior;
+delete invented implementation detail instead of preserving a plausible claim.
 
 ## 6. Verification integrity
 
