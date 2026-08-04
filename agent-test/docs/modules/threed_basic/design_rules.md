@@ -9,6 +9,11 @@ simple geometry, lights, fog, a sky texture, and DOM overlays.
 Do not add physics, touch controls, multiplayer, imported 3D models, or any
 text-to-3D service. 2D Phaser templates are unrelated and must remain unchanged.
 
+Explicit prompt mechanics are binding. Never reinterpret ordered or sequential
+objectives as unordered collection to match the scaffold. Keep the existing
+public API and implement the requested rule with the smallest private state in
+`GameScene`, such as one next-objective index over the authored `SceneMap` order.
+
 ## 2. Required runtime contract
 
 | Area | Required |
