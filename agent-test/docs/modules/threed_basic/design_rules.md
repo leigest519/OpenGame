@@ -39,6 +39,9 @@ public API and implement the requested rule with the smallest private state in
 
 Never request a model, mesh, GLB, FBX, normal map, or text-to-3D output. Do not
 use `colormap` for glossy, translucent, emissive, or sky assets.
+Keep every image, audio file, and screenshot as a separate file inside the game
+workspace. Reference runtime assets through `asset-pack.json` and relative paths;
+never inline real media as Base64 or a Data URL in source, config, HTML, or GDD.
 
 ## 4. Level and camera budget
 
@@ -65,3 +68,15 @@ The GDD must end with:
 - any placeholder/fallback used;
 - `3D scope: primitives + generated image textures; no model generation`;
 - the command evidence from build and smoke.
+
+## 6. Verification integrity
+
+Acceptance must test the declared win condition without strengthening or
+replacing it. Optional collectibles, checkpoints, and side objectives cannot
+become pass gates unless the prompt explicitly makes them required.
+
+A complete-playthrough PASS must run against the final uninstrumented artifact.
+Read-only diagnostic probes may explain a failure, but they cannot be required
+for the final PASS. Save screenshots as files and report their paths; use the
+official smoke pixel/WebGL assertions instead of reading screenshots back into
+the generation session.
