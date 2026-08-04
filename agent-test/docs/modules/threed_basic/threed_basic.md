@@ -12,7 +12,7 @@ and the one level rather than replacing the shell.
 | 2 | edit `SceneMap.ts` | main route and every pickup are reachable; obstacle collision radii leave a traversable lane |
 | 3 | merge tuning into `gameConfig.json` | every leaf has one runtime consumer; superseded aliases are deleted |
 | 4 | theme materials and DOM text | canvas remains WebGL-only; HUD remains DOM-only |
-| 5 | run build and smoke | zero errors, non-black canvas, WebGL context, ESC resume |
+| 5 | run build and smoke | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only |
 
 ## Runtime lifecycle
 
@@ -48,6 +48,10 @@ the fallback key to the GDD Asset Degradation Log. The fallback makes the game
 playable; it does not authorize skipping the required asset call.
 
 ## Manual play check
+
+Keep the scaffolded `window.__opengame3d` surface exact: `isPaused` and
+`renderer` only. Never add teleport, time/state setters, or collectible cheats
+to make this check pass.
 
 1. Press Enter on the title screen.
 2. Move with W/A/S/D or arrow keys; drag the mouse to look.

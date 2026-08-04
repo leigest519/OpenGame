@@ -31,6 +31,19 @@ Required public methods:
 | `isPaused()` | smoke/lifecycle observable pause state |
 | `resize()` | update camera aspect and renderer size |
 
+## Smoke bridge
+
+`window.__opengame3d` is an exact, read-only probe surface:
+
+```ts
+{ isPaused: () => boolean; renderer: 'three.js' }
+```
+
+Do not add `teleport`, time setters, collectible setters, mutable `state`, or
+other gameplay shortcuts. Build, pause, completion, failure, and restart must
+be verified through keyboard/mouse events and the visible DOM. Test time limits
+with browser clock control or a pure unit check, not a shipped runtime setter.
+
 ## SceneMap
 
 `initSceneMap()` returns `playerSpawn`, `floorPatches`, `collectibles`, and `obstacles`.
