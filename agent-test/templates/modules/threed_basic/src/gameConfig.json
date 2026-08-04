@@ -1,0 +1,20 @@
+{
+  "screenSize": {
+    "width": { "value": 1152, "type": "number", "description": "Reference width" },
+    "height": { "value": 768, "type": "number", "description": "Reference height" }
+  },
+  "renderConfig": {
+    "pixelRatioCap": { "value": 2, "type": "number", "description": "Renderer pixel ratio cap" },
+    "fogNear": { "value": 16, "type": "number", "description": "Fog near distance" },
+    "fogFar": { "value": 82, "type": "number", "description": "Fog far distance" }
+  },
+  "playerConfig": {
+    "moveSpeed": { "value": 9, "type": "number", "description": "Movement units per second" },
+    "mouseSensitivity": { "value": 0.002, "type": "number", "description": "Mouse look sensitivity" }
+  },
+  "levelConfig": {
+    "trackHalfWidth": { "value": 7, "type": "number", "description": "Half-width of the playable track" },
+    "finishZ": { "value": -78, "type": "number", "description": "End of the main path" },
+    "collectRadius": { "value": 1.8, "type": "number", "description": "Manual pickup radius" }
+  }
+}

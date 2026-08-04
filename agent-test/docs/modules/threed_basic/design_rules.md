@@ -1,0 +1,50 @@
+# threed_basic Design Rules
+
+## 1. Product shape
+
+Build one short, finishable 3D route: the player moves through a single world,
+collects every required item, and reaches one completion state. Use three.js,
+simple geometry, lights, fog, a sky texture, and DOM overlays.
+
+Do not add physics, touch controls, multiplayer, imported 3D models, or any
+text-to-3D service. 2D Phaser templates are unrelated and must remain unchanged.
+
+## 2. Required runtime contract
+
+| Area | Required |
+|---|---|
+| Renderer | `WebGLRenderer`, `PerspectiveCamera`, resize handling, visible non-black frame |
+| World | primitives or custom low-poly geometry, ambient + directional light, fog |
+| Input | WASD and arrow keys; mouse drag/look; ESC pause |
+| HUD | DOM in `#ui-root`; canvas stays dedicated to three.js |
+| Pause | resolve `gameSceneKey ?? currentLevelKey ?? LevelManager.getFirstLevelScene()` |
+| Win | one explicit, reachable completion condition |
+
+## 3. Asset registry rules
+
+3D assets are still ordinary images produced by `generate_game_assets`.
+
+| Key role | Tool type | Max/source rule | three.js use |
+|---|---|---|---|
+| `skybox_texture` | `background` | `1024*1024`; `displaySize: 1024*1024` in GDD | equirectangular scene background |
+| `floor_patch` | `image` | generated image; declare display size <= `1024*1024` | `CircleGeometry` material map |
+| `energy_billboard` | `image` | one centered subject, transparent removal allowed | `SpriteMaterial` |
+| surface texture | `image` | <= `1024*1024`; no glossy colormap | `MeshStandardMaterial.map` |
+
+Never request a model, mesh, GLB, FBX, normal map, or text-to-3D output. Do not
+use `colormap` for glossy, translucent, emissive, or sky assets.
+
+## 4. Level and camera budget
+
+Use 8-14 floor patches, 5-10 collectibles, and 8-16 low-poly decorations.
+Keep the camera far plane under 250 and cap device pixel ratio at 2. Manual
+distance checks are enough for pickups; do not introduce a physics dependency.
+
+## 5. GDD completion notes
+
+The GDD must end with:
+
+- the actual generated keys and their runtime consumers;
+- any placeholder/fallback used;
+- `3D scope: primitives + generated image textures; no model generation`;
+- the command evidence from build and smoke.
