@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { configMergeInstruction } from './generate-gdd.js';
+import {
+  configMergeInstruction,
+  gameplaySemanticsInstruction,
+} from './generate-gdd.js';
 
 describe('configMergeInstruction', () => {
   it('requires consumed config and deletion of superseded 3D leaves', () => {
@@ -20,4 +23,16 @@ describe('configMergeInstruction', () => {
       expect(instruction).toContain('debugConfig');
     },
   );
+});
+
+describe('gameplaySemanticsInstruction', () => {
+  it('preserves ordered 3D objectives without changing Phaser prompts', () => {
+    const instruction = gameplaySemanticsInstruction('threed_basic');
+
+    expect(instruction).toContain('ordered or sequential objectives');
+    expect(instruction).toContain('private state inside `GameScene`');
+    expect(instruction).toContain('never weaken the user requirement');
+    expect(gameplaySemanticsInstruction('platformer')).toBe('');
+    expect(gameplaySemanticsInstruction('top_down')).toBe('');
+  });
 });
