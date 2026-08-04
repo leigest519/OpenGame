@@ -48,6 +48,11 @@ export function configMergeInstruction(archetype: GameArchetype): string {
   return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json` -- add/update game-specific fields using `{ "value": X }` wrapper format, but NEVER delete infrastructure fields (`screenSize`, `renderConfig`, and Phaser\'s `debugConfig`)';
 }
 
+export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
+  if (archetype !== 'threed_basic') return '';
+  return '5. **3D Mechanic Fidelity**: Preserve explicit gameplay semantics such as ordered or sequential objectives. Public API limits forbid new external hooks, not private state inside `GameScene`; never weaken the user requirement to match the scaffold pickup loop.';
+}
+
 export interface GDDModelConfig {
   apiKey: string;
   baseUrl: string;
@@ -236,6 +241,9 @@ You are a game design engineer. Produce a **Technical Game Design Document** —
 4. **Hook Integrity**: Every hook name MUST exist in template_api.md. Non-existent hooks cause compilation failure.
 
 `;
+
+    const semanticsInstruction = gameplaySemanticsInstruction(archetype);
+    if (semanticsInstruction) prompt += `${semanticsInstruction}\n\n`;
 
     if (coreRules) {
       prompt += `---\n\n## Universal GDD Rules\n\n${coreRules}\n\n`;
