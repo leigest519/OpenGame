@@ -50,7 +50,7 @@ export function configMergeInstruction(archetype: GameArchetype): string {
 
 export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
   if (archetype !== 'threed_basic') return '';
-  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
+  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. If the user explicitly requests a no-fail experience, state that constraint and define tension plus recovery/progression instead of inventing game over. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
 }
 
 export interface GDDModelConfig {
@@ -903,7 +903,7 @@ Refer to Design Guide Section 7 for screen shake rules, Template Capabilities Se
   - \`getCellsInRadius(x, y, radius, w, h)\`: cells in area (AoE effects)
 
 **CRITICAL**: Every hook name must exist in template_api.md. Do NOT invent hooks.`,
-      threed_basic: `Start with a Core Gameplay Contract table: player verbs, 20-60 second repeated loop, decision/skill demand, pressure, failure and recovery, visible feedback, three escalating beats, and exact win/lose conditions. Do not use collection unless the prompt calls for it.
+      threed_basic: `Start with a Core Gameplay Contract table: player verbs, 20-60 second repeated loop, decision/skill demand, pressure, failure and recovery, visible feedback, three escalating beats, and exact win/lose conditions. If the prompt explicitly requires no-fail play, record that constraint and specify tension plus recovery/progression instead. Do not use collection unless the prompt calls for it.
 
 Define the exact \`SceneMap.ts\` arrays required by that loop (floorPatches and obstacles plus only real objective/hazard/trigger arrays), the \`GameScene\` state transitions and consumers, texture-key mapping, camera start/bounds, and completion/failure conditions. Every declared state and array needs a final runtime consumer.
 
@@ -1209,7 +1209,7 @@ List which tower types are available in each level. Early levels may restrict to
 - 8-16 low-poly obstacle decorations outside the main walking line
 - camera start, track bounds, exact gameplay radii/timings, and reachable win/lose positions
 - at least three authored beats showing how pressure or decisions escalate without changing the core verbs
-- a manual play path proving the declared loop, failure/recovery, and win condition through keyboard/mouse input
+- a manual play path proving the declared loop, failure/recovery (or declared no-fail pressure response), and win condition through keyboard/mouse input
 
 End Section 4 with: \`3D scope: primitives + generated image textures; no model generation\`.`,
     };

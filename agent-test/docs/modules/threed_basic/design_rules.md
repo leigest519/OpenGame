@@ -13,7 +13,7 @@ Before assets or level coordinates, declare a Core Gameplay Contract:
 | Verbs      | what the player repeatedly does through keyboard/mouse input                 |
 | Loop       | one 20-60 second action-feedback-decision cycle that repeats at least twice  |
 | Demand     | one meaningful choice, timing, navigation, observation, or resource tradeoff |
-| Pressure   | an observable fail condition plus recovery or restart behavior               |
+| Pressure   | an observable fail condition plus recovery, or an explicit no-fail tension/progression rule |
 | Feedback   | visible DOM/world response for progress, danger, success, and failure        |
 | Escalation | at least three authored beats that intensify the same loop                   |
 | Outcome    | exact reachable win and lose conditions                                      |
@@ -22,6 +22,11 @@ Do not reskin move-and-collect when the prompt asks for avoidance, timing,
 switching, delivery, pursuit, defense, or another mechanic. Every private state
 field and declarative SceneMap array in the contract must name its final runtime
 consumer; do not invent a generic gameplay framework.
+
+When the prompt explicitly requests peaceful or no-fail play, preserve that
+semantics: state that there is no lose condition and specify how tension,
+recovery, and progression still make the loop legible. Never add game over just
+to fill the contract table.
 
 Do not add physics, touch controls, multiplayer, imported 3D models, or any
 text-to-3D service. 2D Phaser templates are unrelated and must remain unchanged.
