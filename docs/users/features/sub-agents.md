@@ -6,11 +6,11 @@ Subagents are specialized AI assistants that handle specific types of tasks with
 
 Subagents are independent AI assistants that:
 
-- **Specialize in specific tasks** - Each Subagent is configured with a focused system prompt for particular types of work
-- **Have separate context** - They maintain their own conversation history, separate from your main chat
-- **Use controlled tools** - You can configure which tools each Subagent has access to
-- **Work autonomously** - Once given a task, they work independently until completion or failure
-- **Provide detailed feedback** - You can see their progress, tool usage, and execution statistics in real-time
+- **Specialize in specific tasks** - Each Subagent is configured with a focused system prompt for particular types of work
+- **Have separate context** - They maintain their own conversation history, separate from your main chat
+- **Use controlled tools** - You can configure which tools each Subagent has access to
+- **Work autonomously** - Once given a task, they work independently until completion or failure
+- **Provide detailed feedback** - You can see their progress, tool usage, and execution statistics in real-time
 
 ## Key Benefits
 
@@ -59,18 +59,18 @@ AI: I'll delegate this to your testing specialist Subagents.
 
 ### CLI Commands
 
-Subagents are managed through the `/agents` slash command and its subcommands:
+Subagents are managed through the `/agents` slash command and its subcommands:
 
-**Usage:**：`/agents create`。Creates a new Subagent through a guided step wizard.
+**Usage:** `/agents create`. Creates a new Subagent through a guided step wizard.
 
-**Usage:**：`/agents manage`。Opens an interactive management dialog for viewing and managing existing Subagents.
+**Usage:** `/agents manage`. Opens an interactive management dialog for viewing and managing existing Subagents.
 
 ### Storage Locations
 
 Subagents are stored as Markdown files in two locations:
 
-- **Project-level**: `.qwen/agents/` (takes precedence)
-- **User-level**: `~/.qwen/agents/` (fallback)
+- **Project-level**: `.qwen/agents/` (takes precedence)
+- **User-level**: `~/.qwen/agents/` (fallback)
 
 This allows you to have both project-specific agents and personal agents that work across all projects.
 
@@ -398,7 +398,7 @@ description: Helps with testing, documentation, code review, and deployment
 ---
 ```
 
-**Why:** Focused agents produce better results and are easier to maintain.
+**Why:** Focused agents produce better results and are easier to maintain.
 
 #### Clear Specialization
 
@@ -422,7 +422,7 @@ description: Works on frontend development tasks
 ---
 ```
 
-**Why:** Specific expertise leads to more targeted and effective assistance.
+**Why:** Specific expertise leads to more targeted and effective assistance.
 
 #### Actionable Descriptions
 
@@ -440,7 +440,7 @@ description: Reviews code for security vulnerabilities, performance issues, and 
 description: A helpful code reviewer
 ```
 
-**Why:** Clear descriptions help the main AI choose the right agent for each task.
+**Why:** Clear descriptions help the main AI choose the right agent for each task.
 
 ### Configuration Best Practices
 

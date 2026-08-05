@@ -4,12 +4,12 @@ OpenGame offers three distinct permission modes that allow you to flexibly contr
 
 ## Permission Modes Comparison
 
-| Mode           | File Editing                | Shell Commands              | Best For                                                                                               | Risk Level |
-| -------------- | --------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ | ---------- |
-| **Plan**​      | ❌ Read-only analysis only  | ❌ Not executed             | • Code exploration <br>• Planning complex changes <br>• Safe code review                               | Lowest     |
-| **Default**​   | ✅ Manual approval required | ✅ Manual approval required | • New/unfamiliar codebases <br>• Critical systems <br>• Team collaboration <br>• Learning and teaching | Low        |
-| **Auto-Edit**​ | ✅ Auto-approved            | ❌ Manual approval required | • Daily development tasks <br>• Refactoring and code improvements <br>• Safe automation                | Medium     |
-| **YOLO**​      | ✅ Auto-approved            | ✅ Auto-approved            | • Trusted personal projects <br>• Automated scripts/CI/CD <br>• Batch processing tasks                 | Highest    |
+| Mode          | File Editing                | Shell Commands              | Best For                                                                                               | Risk Level |
+| ------------- | --------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ | ---------- |
+| **Plan**      | ❌ Read-only analysis only  | ❌ Not executed             | • Code exploration <br>• Planning complex changes <br>• Safe code review                               | Lowest     |
+| **Default**   | ✅ Manual approval required | ✅ Manual approval required | • New/unfamiliar codebases <br>• Critical systems <br>• Team collaboration <br>• Learning and teaching | Low        |
+| **Auto-Edit** | ✅ Auto-approved            | ❌ Manual approval required | • Daily development tasks <br>• Refactoring and code improvements <br>• Safe automation                | Medium     |
+| **YOLO**      | ✅ Auto-approved            | ✅ Auto-approved            | • Trusted personal projects <br>• Automated scripts/CI/CD <br>• Batch processing tasks                 | Highest    |
 
 ### Quick Reference Guide
 
@@ -20,7 +20,7 @@ OpenGame offers three distinct permission modes that allow you to flexibly contr
 
 > [!tip]
 >
-> You can quickly cycle through modes during a session using **Shift+Tab**. The terminal status bar shows your current mode, so you always know what permissions OpenGame has.
+> You can quickly cycle through modes during a session using **Shift+Tab**. The terminal status bar shows your current mode, so you always know what permissions OpenGame has.
 
 ## 1. Use Plan Mode for safe code analysis
 
@@ -100,7 +100,7 @@ Default Mode is the standard way to work with OpenGame. In this mode, you mainta
 
 **Turn on Default Mode during a session**
 
-You can switch into Default Mode during a session using **Shift+Tab**​ to cycle through permission modes. If you're in any other mode, pressing **Shift+Tab**​ will eventually cycle back to Default Mode, indicated by the absence of any mode indicator at the bottom of the terminal.
+You can switch into Default Mode during a session using **Shift+Tab** to cycle through permission modes. If you're in any other mode, pressing **Shift+Tab** will eventually cycle back to Default Mode, indicated by the absence of any mode indicator at the bottom of the terminal.
 
 **Start a new session in Default Mode**
 
@@ -171,8 +171,8 @@ Shift+Tab  # Switch from other modes
 
 1. You ask OpenGame to refactor a function
 2. AI analyzes the code and proposes changes
-3. **Automatically**​ applies all file changes without confirmation
-4. If tests need to be run, it will **request approval**​ to execute `npm test`
+3. **Automatically** applies all file changes without confirmation
+4. If tests need to be run, it will **request approval** to execute `npm test`
 
 ## 4. YOLO Mode - Full Automation
 
@@ -235,7 +235,7 @@ opengame --prompt "Run the test suite, fix all failing tests, then commit change
 
 ### Keyboard Shortcut Switching
 
-During a OpenGame session, use **Shift+Tab**​ to quickly cycle through the three modes:
+During a OpenGame session, use **Shift+Tab** to quickly cycle through the three modes:
 
 ```
 Default Mode → Auto-Edit Mode → YOLO Mode → Plan Mode → Default Mode
@@ -257,7 +257,7 @@ Default Mode → Auto-Edit Mode → YOLO Mode → Plan Mode → Default Mode
 
 ### Mode Usage Recommendations
 
-1. **New to codebase**: Start with **Plan Mode**​ for safe exploration
-2. **Daily development tasks**: Use **Auto-Accept Edits**​ (default mode), efficient and safe
-3. **Automated scripts**: Use **YOLO Mode**​ in controlled environments for full automation
-4. **Complex refactoring**: Use **Plan Mode**​ first for detailed planning, then switch to appropriate mode for execution
+1. **New to codebase**: Start with **Plan Mode** for safe exploration
+2. **Daily development tasks**: Use **Auto-Accept Edits** (default mode), efficient and safe
+3. **Automated scripts**: Use **YOLO Mode** in controlled environments for full automation
+4. **Complex refactoring**: Use **Plan Mode** first for detailed planning, then switch to appropriate mode for execution
