@@ -8,15 +8,31 @@ Collection is the reference scaffold fallback, not the archetype definition.
 
 Before assets or level coordinates, declare a Core Gameplay Contract:
 
-| Contract   | Required evidence                                                            |
-| ---------- | ---------------------------------------------------------------------------- |
-| Verbs      | what the player repeatedly does through keyboard/mouse input                 |
-| Loop       | one 20-60 second action-feedback-decision cycle that repeats at least twice  |
-| Demand     | one meaningful choice, timing, navigation, observation, or resource tradeoff |
+| Contract   | Required evidence                                                                           |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| Verbs      | what the player repeatedly does through keyboard/mouse input                                |
+| Loop       | one 20-60 second action-feedback-decision cycle that repeats at least twice                 |
+| Demand     | one meaningful choice, timing, navigation, observation, or resource tradeoff                |
 | Pressure   | an observable fail condition plus recovery, or an explicit no-fail tension/progression rule |
-| Feedback   | visible DOM/world response for progress, danger, success, and failure        |
-| Escalation | at least three authored beats that intensify the same loop                   |
-| Outcome    | exact reachable win and lose conditions                                      |
+| Feedback   | visible DOM/world response for progress, danger, success, and failure                       |
+| Escalation | at least three authored beats that intensify the same loop                                  |
+| Outcome    | exact reachable win and lose conditions                                                     |
+
+Immediately follow the contract with a Gameplay Feasibility Ledger. This is a
+small arithmetic table, not a new runtime framework:
+
+| Evidence       | Required                                                                                                                                |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Loop signature | cue -> player action -> decision -> state change -> feedback -> repeat                                                                  |
+| Winning trace  | each required transition, its deadline, derived action/travel time, resource delta, and resulting state through the exact win condition |
+| Losing trace   | one missed/low-priority/counterfactual decision whose same rules reach the declared failure or recovery response                        |
+| Closure        | handled events equal the authored event count; terminal health/time/progress satisfies the exact outcome predicate                      |
+
+Derive travel time from final authored distance and movement speed, and derive
+state deltas from the final damage, recovery, timer, and threshold consumers.
+If the ledger does not close, tune the authored data before calling the design
+playable. Recompute it after every Phase 6 tuning edit; do not leave aggregate
+counts that disagree with the final playthrough.
 
 Do not reskin move-and-collect when the prompt asks for avoidance, timing,
 switching, delivery, pursuit, defense, or another mechanic. Every private state
@@ -110,6 +126,7 @@ The GDD must end with:
 - any placeholder/fallback used;
 - `3D scope: primitives + generated image textures; no model generation`;
 - the command evidence from build and smoke.
+- the final feasibility ledger totals and observed win/lose terminal states.
 
 After Phase 6 changes, reconcile the GDD body itself against the final
 `SceneMap`, config, asset-pack, and uninstrumented playthrough. Correct stale
