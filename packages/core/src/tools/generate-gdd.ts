@@ -43,7 +43,7 @@ export interface GenerateGDDParams {
 
 export function configMergeInstruction(archetype: GameArchetype): string {
   if (archetype === 'threed_basic') {
-    return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json`; every leaf must have a runtime consumer, and renamed or superseded leaves must be removed in the same edit.';
+    return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json`; every leaf must have a runtime consumer, and renamed or superseded leaves must be removed in the same edit. Derive authored counts from `SceneMap` arrays: do not add a config count leaf merely to mirror or assert an authored array `.length`; keep a count in config only when gameplay consumes it as a separate completion threshold.';
   }
   return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json` -- add/update game-specific fields using `{ "value": X }` wrapper format, but NEVER delete infrastructure fields (`screenSize`, `renderConfig`, and Phaser\'s `debugConfig`)';
 }
