@@ -27,9 +27,15 @@ small arithmetic table, not a new runtime framework:
 | Winning trace  | each required transition, its deadline, derived action/travel time, resource delta, and resulting state through the exact win condition |
 | Losing trace   | one missed/low-priority/counterfactual decision whose same rules reach the declared failure or recovery response                        |
 | Closure        | handled events equal the authored event count; terminal health/time/progress satisfies the exact outcome predicate                      |
+| Provenance     | label each trace `DERIVED` or `OBSERVED`; only the exact played route, strategy, and terminal state may be `OBSERVED PASS`              |
 
 Derive travel time from final authored distance and movement speed, and derive
 state deltas from the final damage, recovery, timer, and threshold consumers.
+Carry the resulting state across every escalation threshold and recompute later
+rows with the active beat or phase. A substitute route, stand-in mechanic, or
+partial cycle proves only the transitions it exercised; it cannot upgrade the
+target trace to observed. Final observed terminal values override conflicting
+estimates.
 If the ledger does not close, tune the authored data before calling the design
 playable. Recompute it after every Phase 6 tuning edit; do not leave aggregate
 counts that disagree with the final playthrough.

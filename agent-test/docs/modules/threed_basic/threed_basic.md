@@ -74,6 +74,13 @@ failure or recovery response, and handled-event totals must equal the authored
 array count. Recompute this table after tuning; a build or smoke PASS cannot
 substitute for a closed gameplay budget.
 
+Label each ledger trace `DERIVED` or `OBSERVED`. Only the exact route, strategy,
+and terminal state exercised through normal input on the final uninstrumented
+artifact may be `OBSERVED PASS`. A substitute route, stand-in mechanic, or
+partial cycle proves only its shared transitions. Derived traces must carry
+state across escalation thresholds and recompute later rows with the resulting
+beat or phase; final observed terminal values override conflicting estimates.
+
 Treat config as executable data. Keep the existing path when it already serves
 the intended value; if a generated design chooses a new path, update the code
 and remove the old path together. Never add `fogDensity`, a second pickup
