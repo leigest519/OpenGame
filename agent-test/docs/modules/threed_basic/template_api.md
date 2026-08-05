@@ -70,6 +70,11 @@ their intersection half-width must remain at least two player radii. Spawn,
 required pickup centers, and the finish center must pass the same floor and
 expanded-obstacle predicate used by `resolveMovement()`.
 
+For a branched route, array order no longer declares adjacency. Record intended
+neighbor pairs and forbidden cross-lane pairs in the GDD, then test them against
+the final floor union and expanded obstacles. If a supposedly committed branch
+can cross into another lane, the decision contract is not implemented.
+
 ## Config ownership
 
 The shipped config is a starting contract, not a compatibility registry. Keep
