@@ -32,6 +32,11 @@ in the final source/config and compare every player/camera spawn yaw claim with
 the final `SceneMap.playerSpawn.yaw`. Remove stale aliases and old spawn values
 from the GDD body; a completion note saying they were fixed is not evidence.
 
+Replace roadmap instructions such as "keep renderConfig untouched" with the
+final values and consumers after any tuning edit. Describe a camera far plane
+or renderer setting as config-backed only when its final runtime consumer reads
+that named leaf; a nearby fog or DPR field is not evidence for camera config.
+
 ## Runtime lifecycle
 
 ```text
