@@ -27,6 +27,11 @@ path, its SHA-256, and the relevant diff result. If the protected block already
 matches, describe the incident as a generated edit that was reverted, not a
 template defect.
 
+Before declaring reconciliation complete, search every backticked tuning name
+in the final source/config and compare every player/camera spawn yaw claim with
+the final `SceneMap.playerSpawn.yaw`. Remove stale aliases and old spawn values
+from the GDD body; a completion note saying they were fixed is not evidence.
+
 ## Runtime lifecycle
 
 ```text
