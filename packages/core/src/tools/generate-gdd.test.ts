@@ -42,6 +42,12 @@ describe('gameplaySemanticsInstruction', () => {
     expect(instruction).toContain('private state inside `GameScene`');
     expect(instruction).toContain('never weaken the user requirement');
     expect(instruction).toContain(
+      'fog or DPR leaves do not make camera far config-backed',
+    );
+    expect(instruction).toContain('forbidden cross-lane transitions');
+    expect(instruction).toContain('play every branch');
+    expect(instruction).toContain('attempt any claimed blocked switch');
+    expect(instruction).toContain(
       'never strengthen, replace, or contradict it',
     );
     expect(instruction).toContain(
