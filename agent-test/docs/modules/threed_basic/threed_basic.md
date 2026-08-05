@@ -95,7 +95,7 @@ to make this check pass.
 2. Move with W/A/S/D or arrow keys; drag the mouse to look.
 3. Press ESC, confirm the pause overlay, then ESC again and confirm movement.
 4. Exercise the GDD Core Gameplay Contract through at least two cycles and all three escalation beats.
-5. Trigger the visible failure/recovery path, then reach the declared win state and verify restart.
+5. Trigger the visible failure/recovery path (or the declared no-fail pressure response), then reach the win state and verify restart.
 
 ## Frequent failures
 

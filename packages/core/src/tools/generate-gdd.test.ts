@@ -33,6 +33,8 @@ describe('gameplaySemanticsInstruction', () => {
     expect(instruction).toContain('repeatable 20-60 second core loop');
     expect(instruction).toContain('meaningful decision or skill demand');
     expect(instruction).toContain('observable failure condition');
+    expect(instruction).toContain('explicitly requests a no-fail experience');
+    expect(instruction).toContain('instead of inventing game over');
     expect(instruction).toContain('three escalating beats');
     expect(instruction).toContain('exact win/lose conditions');
     expect(instruction).toContain('final `GameScene` or DOM consumer');
