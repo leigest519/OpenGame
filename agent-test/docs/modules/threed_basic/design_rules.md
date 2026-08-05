@@ -84,6 +84,12 @@ that shrink and must sit outside every expanded obstacle circle. Do not place a
 finish center inside a lighthouse or other blocker and rely on the trigger
 radius reaching a thin boundary crescent.
 
+For a branched route, list intended neighbor pairs and forbidden cross-lane
+transitions after the same shrink. A claimed committed choice is false if the
+final floor union still lets the player switch lanes. The final uninstrumented
+play check must finish every branch and attempt each claimed blocked switch;
+testing only one branch does not prove a meaningful route decision.
+
 Every `gameConfig.json` leaf must have one literal runtime consumer. Do not keep
 aliases for the same value: if pickup code moves from
 `levelConfig.collectRadius` to another path, delete the old leaf in the same
@@ -91,6 +97,9 @@ edit. The current linear fog consumes `renderConfig.fogNear` and `fogFar`; do
 not add `fogDensity` unless the implementation changes and the superseded
 linear-fog leaves are removed. Derive authored counts from `SceneMap` arrays
 unless a separately consumed completion threshold is required.
+Camera near/far values are source literals unless the final camera constructor
+or update path reads an exact named config leaf. Fog distance and DPR fields do
+not make a camera far plane config-backed.
 
 ## 5. GDD completion notes
 

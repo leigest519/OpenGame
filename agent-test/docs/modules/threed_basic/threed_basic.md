@@ -96,6 +96,7 @@ to make this check pass.
 3. Press ESC, confirm the pause overlay, then ESC again and confirm movement.
 4. Exercise the GDD Core Gameplay Contract through at least two cycles and all three escalation beats.
 5. Trigger the visible failure/recovery path (or the declared no-fail pressure response), then reach the win state and verify restart.
+6. If the level branches, finish every branch and attempt each transition the GDD claims is blocked; one successful route is not branch coverage.
 
 ## Frequent failures
 

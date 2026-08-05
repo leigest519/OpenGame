@@ -50,7 +50,7 @@ export function configMergeInstruction(archetype: GameArchetype): string {
 
 export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
   if (archetype !== 'threed_basic') return '';
-  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. If the user explicitly requests a no-fail experience, state that constraint and define tension plus recovery/progression instead of inventing game over. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
+  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. If the user explicitly requests a no-fail experience, state that constraint and define tension plus recovery/progression instead of inventing game over. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Treat camera near/far as source literals unless the final code reads a named config leaf; fog or DPR leaves do not make camera far config-backed. For a branched choice, list intended neighbor pairs and forbidden cross-lane transitions under the player-radius-shrunk collision predicate, then play every branch and attempt any claimed blocked switch before calling the decision meaningful. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
 }
 
 export interface GDDModelConfig {
@@ -907,6 +907,8 @@ Refer to Design Guide Section 7 for screen shake rules, Template Capabilities Se
 
 Define the exact \`SceneMap.ts\` arrays required by that loop (floorPatches and obstacles plus only real objective/hazard/trigger arrays), the \`GameScene\` state transitions and consumers, texture-key mapping, camera start/bounds, and completion/failure conditions. Every declared state and array needs a final runtime consumer.
 
+For branched routes, list intended neighboring floor-patch pairs and forbidden cross-lane transitions, then require the final uninstrumented play check to complete every branch and attempt any claimed blocked switch. Never call a route choice committed when the final collision geometry permits lane switching. Treat camera near/far as source literals unless final code reads an exact named config leaf; fog and DPR config are not camera-far consumers.
+
 Use only the public constructor and methods from template_api.md: \`update\`, \`setPaused\`, \`isPaused\`, and \`resize\`. Preserve main.ts RAF and DOM-screen wiring. List exact config fields and values; do not invent editor/runtime hooks.`,
       tower_defense: `Define every tower type, enemy type, and level scene with EXACT configurations. This maps directly to code files.
 
@@ -1209,7 +1211,8 @@ List which tower types are available in each level. Early levels may restrict to
 - 8-16 low-poly obstacle decorations outside the main walking line
 - camera start, track bounds, exact gameplay radii/timings, and reachable win/lose positions
 - at least three authored beats showing how pressure or decisions escalate without changing the core verbs
-- a manual play path proving the declared loop, failure/recovery (or declared no-fail pressure response), and win condition through keyboard/mouse input
+- for a branched route, intended neighbor pairs and forbidden cross-lane transitions after player-radius shrink
+- manual play paths proving every branch, any claimed blocked switch, failure/recovery (or declared no-fail pressure response), and the win condition through keyboard/mouse input
 
 End Section 4 with: \`3D scope: primitives + generated image textures; no model generation\`.`,
     };
