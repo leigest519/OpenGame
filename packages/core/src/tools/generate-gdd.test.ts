@@ -10,6 +10,13 @@ describe('configMergeInstruction', () => {
 
     expect(instruction).toContain('every leaf must have a runtime consumer');
     expect(instruction).toContain('superseded leaves must be removed');
+    expect(instruction).toContain(
+      'Derive authored counts from `SceneMap` arrays',
+    );
+    expect(instruction).toContain(
+      'do not add a config count leaf merely to mirror or assert',
+    );
+    expect(instruction).toContain('separate completion threshold');
     expect(instruction).not.toContain('NEVER delete infrastructure fields');
   });
 
