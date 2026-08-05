@@ -67,6 +67,15 @@ describe('gameplaySemanticsInstruction', () => {
     expect(instruction).toContain(
       'Recompute the ledger after every tuning edit',
     );
+    expect(instruction).toContain('Label every trace DERIVED or OBSERVED');
+    expect(instruction).toContain('exact route, strategy, and terminal state');
+    expect(instruction).toContain(
+      'must not upgrade the target trace to observed',
+    );
+    expect(instruction).toContain('carry state across escalation thresholds');
+    expect(instruction).toContain(
+      'observed terminal values override conflicting estimates',
+    );
     expect(gameplaySemanticsInstruction('platformer')).toBe('');
     expect(gameplaySemanticsInstruction('top_down')).toBe('');
   });
