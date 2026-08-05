@@ -13,8 +13,8 @@ config, materials, text, and win logic around them.
 
 | Order | Action                                                                    | Done when                                                                                         |
 | ----- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| 1     | map GDD asset keys to `skybox_texture`, `floor_patch`, `energy_billboard` | every used key exists in `asset-pack.json`                                                        |
-| 2     | edit `SceneMap.ts`                                                        | main route and every pickup are reachable; obstacle collision radii leave a traversable lane      |
+| 1     | map each semantic GDD asset key to its final texture consumer             | every used key exists in `asset-pack.json`; scaffold fallback keys are not mandatory              |
+| 2     | edit `SceneMap.ts`                                                        | the chosen loop's targets and win/lose positions are reachable; collision leaves a traversable lane |
 | 3     | merge tuning into `gameConfig.json`                                       | every leaf has one runtime consumer; superseded aliases are deleted                               |
 | 4     | theme materials and DOM text                                              | canvas remains WebGL-only; HUD remains DOM-only                                                   |
 | 5     | run build and smoke                                                       | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only          |
@@ -43,7 +43,7 @@ that named leaf; a nearby fog or DPR field is not evidence for camera config.
 Preloader.load -> TitleScreen.show -> GameScene constructor
   -> applyThreeSceneDefaults -> initSceneMap -> HUD.show
   -> requestAnimationFrame -> GameScene.update -> resolveMovement -> renderer.render
-  -> all collectibles removed -> onComplete -> GameCompleteUIScene
+  -> declared gameplay loop reaches its win state -> onComplete -> GameCompleteUIScene
 ```
 
 `deltaSeconds` is capped by `main.ts`; all movement must multiply by it.
@@ -75,8 +75,9 @@ and reconcile each config leaf's `description` against the same final consumer.
 ## Asset hookup
 
 Only call `generate_game_assets`. A skybox is a generated 2D equirectangular
-image, floor art is a generated 2D patch/texture, and an energy marker is a
-generated billboard sprite. Do not call shell image tools or any 3D model API.
+image, floor art is a generated 2D patch/texture, and interactive world art is
+a generated billboard sprite with a semantic key. Do not call shell image
+tools or any 3D model API.
 Keep returned media as workspace files and consume the `asset-pack.json`
 relative URL; never copy media bytes or Base64/Data URLs into editable files.
 
@@ -93,8 +94,8 @@ to make this check pass.
 1. Press Enter on the title screen.
 2. Move with W/A/S/D or arrow keys; drag the mouse to look.
 3. Press ESC, confirm the pause overlay, then ESC again and confirm movement.
-4. Follow the single route and collect all energy markers.
-5. Confirm `TRAIL COMPLETE`, then verify restart.
+4. Exercise the GDD Core Gameplay Contract through at least two cycles and all three escalation beats.
+5. Trigger the visible failure/recovery path (or the declared no-fail pressure response), then reach the win state and verify restart.
 
 ## Frequent failures
 

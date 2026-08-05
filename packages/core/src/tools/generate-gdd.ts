@@ -50,7 +50,7 @@ export function configMergeInstruction(archetype: GameArchetype): string {
 
 export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
   if (archetype !== 'threed_basic') return '';
-  return '5. **3D Mechanic Fidelity**: Preserve explicit gameplay semantics such as ordered or sequential objectives. Public API limits forbid new external hooks, not private state inside `GameScene`; never weaken the user requirement to match the scaffold pickup loop. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
+  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. If the user explicitly requests a no-fail experience, state that constraint and define tension plus recovery/progression instead of inventing game over. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
 }
 
 export interface GDDModelConfig {
@@ -647,7 +647,7 @@ Tower Defense does NOT use generate_tilemap -- maps are code-defined grids.
 - Runtime: pinned three.js + TypeScript + Vite; do not import Phaser.
 - World: primitives/custom low-poly geometry, one PerspectiveCamera, ambient + directional light, fog, and a sky texture.
 - Input: WASD/arrows + mouse; ESC uses the existing DOM pause contract. No touch controls.
-- Gameplay: one short route, 5-10 collectible objectives, one reachable completion state.
+- Gameplay: one short, explicit core loop with player verbs, pressure/failure, feedback, escalation, and reachable win/lose states; collection is only the reference fallback.
 - Collision: manual bounds/proximity only. Do not add a physics engine.
 - Assets: use generate_game_assets only for skybox/texture/billboard/floor patch images. No models, GLB/FBX/OBJ, text-to-3D, or generate_tilemap.
 - Architecture: keep main.ts RAF wiring; put declarative positions in SceneMap.ts and rendering/gameplay in GameScene.ts.
@@ -743,7 +743,7 @@ ${this.getSection4Guidance(archetype)}`;
       threed_basic: `**Three.js image asset rules:**
 - Skybox: \`type: "background"\`, key \`skybox_texture\`, equirectangular, \`resolution: "1024*1024"\`.
 - Floor patch/surface: \`type: "image"\`, key \`floor_patch\`; declare runtime \`displaySize\` in the GDD, never pass it to the tool.
-- Collectible billboard: \`type: "image"\`, key \`energy_billboard\`, one centered subject.
+- Interactive/objective billboard: \`type: "image"\`, one centered subject and a semantic key; \`energy_billboard\` is only the collection scaffold fallback.
 - Keep source/display size <= 1024*1024. Colormap only matte art; never glossy/translucent/emissive/sky art.
 - Every generated image must remain in asset-pack.json. Do not request models, meshes, normal maps, or text-to-3D output.`,
     };
@@ -903,7 +903,9 @@ Refer to Design Guide Section 7 for screen shake rules, Template Capabilities Se
   - \`getCellsInRadius(x, y, radius, w, h)\`: cells in area (AoE effects)
 
 **CRITICAL**: Every hook name must exist in template_api.md. Do NOT invent hooks.`,
-      threed_basic: `Define the exact \`SceneMap.ts\` arrays (floorPatches, collectibles, obstacles), the \`GameScene\` texture-key mapping, camera start/bounds, and completion condition.
+      threed_basic: `Start with a Core Gameplay Contract table: player verbs, 20-60 second repeated loop, decision/skill demand, pressure, failure and recovery, visible feedback, three escalating beats, and exact win/lose conditions. If the prompt explicitly requires no-fail play, record that constraint and specify tension plus recovery/progression instead. Do not use collection unless the prompt calls for it.
+
+Define the exact \`SceneMap.ts\` arrays required by that loop (floorPatches and obstacles plus only real objective/hazard/trigger arrays), the \`GameScene\` state transitions and consumers, texture-key mapping, camera start/bounds, and completion/failure conditions. Every declared state and array needs a final runtime consumer.
 
 Use only the public constructor and methods from template_api.md: \`update\`, \`setPaused\`, \`isPaused\`, and \`resize\`. Preserve main.ts RAF and DOM-screen wiring. List exact config fields and values; do not invent editor/runtime hooks.`,
       tower_defense: `Define every tower type, enemy type, and level scene with EXACT configurations. This maps directly to code files.
@@ -971,7 +973,7 @@ if (slowAmt && slowDur) enemy.applyStatusEffect('slow', slowAmt, slowDur, 0x4488
       top_down: 'Level Design',
       grid_logic: 'Level & Puzzle Design (Code-Defined Grid)',
       tower_defense: 'Map & Wave Design',
-      threed_basic: 'Single-Route 3D Level Map',
+      threed_basic: '3D Level & Gameplay Loop',
     };
     return titles[archetype] || 'Level Design';
   }
@@ -1201,12 +1203,13 @@ List which tower types are available in each level. Early levels may restrict to
 - Starting gold: 80-200 (higher = easier)
 - Kill rewards: 5-50g per enemy type
 - Wave clear bonuses: 10-100g per wave`,
-      threed_basic: `**Do not use generate_tilemap.** Provide one declarative route for \`initSceneMap()\`:
+      threed_basic: `**Do not use generate_tilemap.** Provide one declarative level for \`initSceneMap()\` that executes the Section 3 Core Gameplay Contract:
 - 8-14 overlapping floor patches with x/z/radius values
-- 5-10 reachable collectibles with id/x/y/z values
+- only the objective, hazard, switch, gate, patrol, or trigger arrays actually consumed by the chosen loop; collectibles are optional
 - 8-16 low-poly obstacle decorations outside the main walking line
-- camera start, track bounds, pickup radius, and finish z
-- a manual play path proving every collectible is reachable
+- camera start, track bounds, exact gameplay radii/timings, and reachable win/lose positions
+- at least three authored beats showing how pressure or decisions escalate without changing the core verbs
+- a manual play path proving the declared loop, failure/recovery (or declared no-fail pressure response), and win condition through keyboard/mouse input
 
 End Section 4 with: \`3D scope: primitives + generated image textures; no model generation\`.`,
     };

@@ -5,7 +5,7 @@
 | File | Contract |
 |---|---|
 | `src/main.ts` | boots title, runtime, DOM HUD, pause, completion, render loop |
-| `src/GameScene.ts` | owns renderer, scene, camera, world, manual pickup checks |
+| `src/GameScene.ts` | owns renderer, scene, camera, world, and private gameplay state |
 | `src/CollisionResolver.ts` | pure XZ road/obstacle movement resolution with substeps |
 | `src/InputController.ts` | keyboard + mouse state only |
 | `src/SceneMap.ts` | Editor-facing declarative positions via `initSceneMap()` |
@@ -51,10 +51,13 @@ with browser clock control or a pure unit check, not a shipped runtime setter.
 
 ## SceneMap
 
-`initSceneMap()` returns `playerSpawn`, `floorPatches`, `collectibles`, and `obstacles`.
-Change positions there instead of hard-coding level coordinates inside the
-render loop. Add new declarative arrays at the `// EXT` point only when a real
-consumer is implemented.
+The reference `initSceneMap()` returns `playerSpawn`, `floorPatches`,
+`collectibles`, and `obstacles`; its collection loop is a working fallback, not
+a required genre. Change positions there instead of hard-coding level
+coordinates inside the render loop. Add or replace declarative arrays at the
+`// EXT` point only when the chosen Core Gameplay Contract has a real consumer.
+Keep the public lifecycle API while implementing the smallest private state
+needed by that loop.
 
 Each obstacle declares `collisionRadius` independently from visual `scale`.
 `resolveMovement()` keeps the full player circle inside at least one floor
@@ -80,7 +83,9 @@ consumer is a failed implementation check, not a harmless preset.
 ## Texture keys
 
 `Preloader` reads Phaser-compatible `asset-pack.json` sections and loads image
-entries into `Map<string, THREE.Texture>`. The reference module recognizes:
+entries into `Map<string, THREE.Texture>`. The reference module recognizes
+these fallback keys. A chosen loop may add semantic image keys when the final
+`GameScene` consumes each one:
 
 | Key | Fallback |
 |---|---|

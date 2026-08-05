@@ -26,9 +26,18 @@ describe('configMergeInstruction', () => {
 });
 
 describe('gameplaySemanticsInstruction', () => {
-  it('preserves ordered 3D objectives without changing Phaser prompts', () => {
+  it('requires a complete 3D core loop without changing Phaser prompts', () => {
     const instruction = gameplaySemanticsInstruction('threed_basic');
 
+    expect(instruction).toContain('Do not default to the scaffold pickup loop');
+    expect(instruction).toContain('repeatable 20-60 second core loop');
+    expect(instruction).toContain('meaningful decision or skill demand');
+    expect(instruction).toContain('observable failure condition');
+    expect(instruction).toContain('explicitly requests a no-fail experience');
+    expect(instruction).toContain('instead of inventing game over');
+    expect(instruction).toContain('three escalating beats');
+    expect(instruction).toContain('exact win/lose conditions');
+    expect(instruction).toContain('final `GameScene` or DOM consumer');
     expect(instruction).toContain('ordered or sequential objectives');
     expect(instruction).toContain('private state inside `GameScene`');
     expect(instruction).toContain('never weaken the user requirement');
