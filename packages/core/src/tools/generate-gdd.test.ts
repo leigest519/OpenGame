@@ -55,6 +55,18 @@ describe('gameplaySemanticsInstruction', () => {
     );
     expect(instruction).toContain('final uninstrumented artifact');
     expect(instruction).toContain('probes must not be a prerequisite for PASS');
+    expect(instruction).toContain(
+      'cue -> player action -> decision -> state change -> feedback -> repeat',
+    );
+    expect(instruction).toContain('Gameplay Feasibility Ledger');
+    expect(instruction).toContain('one complete winning trace');
+    expect(instruction).toContain('derived traversal/action time');
+    expect(instruction).toContain(
+      'handled-action counts must equal the authored event count',
+    );
+    expect(instruction).toContain(
+      'Recompute the ledger after every tuning edit',
+    );
     expect(gameplaySemanticsInstruction('platformer')).toBe('');
     expect(gameplaySemanticsInstruction('top_down')).toBe('');
   });

@@ -11,14 +11,14 @@ config, materials, text, and win logic around them.
 
 ## Phase 5 implementation order
 
-| Order | Action                                                                    | Done when                                                                                         |
-| ----- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| 1     | map each semantic GDD asset key to its final texture consumer             | every used key exists in `asset-pack.json`; scaffold fallback keys are not mandatory              |
-| 2     | edit `SceneMap.ts`                                                        | the chosen loop's targets and win/lose positions are reachable; collision leaves a traversable lane |
-| 3     | merge tuning into `gameConfig.json`                                       | every leaf has one runtime consumer; superseded aliases are deleted                               |
-| 4     | theme materials and DOM text                                              | canvas remains WebGL-only; HUD remains DOM-only                                                   |
-| 5     | run build and smoke                                                       | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only          |
-| 6     | reconcile `GAME_DESIGN.md` after the final uninstrumented playthrough     | the GDD body, config, asset-pack, SceneMap, and observed win condition state one consistent truth |
+| Order | Action                                                                | Done when                                                                                            |
+| ----- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 1     | map each semantic GDD asset key to its final texture consumer         | every used key exists in `asset-pack.json`; scaffold fallback keys are not mandatory                 |
+| 2     | edit `SceneMap.ts` and close the Gameplay Feasibility Ledger          | the chosen loop's route/action times fit its deadlines; resource deltas reach both declared outcomes |
+| 3     | merge tuning into `gameConfig.json`                                   | every leaf has one runtime consumer; superseded aliases are deleted                                  |
+| 4     | theme materials and DOM text                                          | canvas remains WebGL-only; HUD remains DOM-only                                                      |
+| 5     | run build and smoke                                                   | zero errors, non-black canvas, WebGL context, ESC resume; smoke bridge remains read-only             |
+| 6     | reconcile `GAME_DESIGN.md` after the final uninstrumented playthrough | the GDD body, config, asset-pack, SceneMap, and observed win condition state one consistent truth    |
 
 Do not attribute a defect or fix to the scaffold, template, or frozen baseline
 from memory. Compare the final file with the exact scaffold source first. Any
@@ -65,6 +65,15 @@ pickup centers, and finish center must be playable points outside expanded
 obstacle circles. A trigger radius overlapping a playable boundary does not
 make a finish center embedded in solid collision acceptable.
 
+Then execute the GDD Gameplay Feasibility Ledger against final data. For every
+required decision, compare its cue-to-impact/action window with the derived
+route or action time, apply the exact config damage/recovery/progress delta, and
+carry the resulting state into the next row. The winning trace must satisfy the
+exact win predicate, the losing/counterfactual trace must reach its declared
+failure or recovery response, and handled-event totals must equal the authored
+array count. Recompute this table after tuning; a build or smoke PASS cannot
+substitute for a closed gameplay budget.
+
 Treat config as executable data. Keep the existing path when it already serves
 the intended value; if a generated design chooses a new path, update the code
 and remove the old path together. Never add `fogDensity`, a second pickup
@@ -97,21 +106,22 @@ to make this check pass.
 4. Exercise the GDD Core Gameplay Contract through at least two cycles and all three escalation beats.
 5. Trigger the visible failure/recovery path (or the declared no-fail pressure response), then reach the win state and verify restart.
 6. If the level branches, finish every branch and attempt each transition the GDD claims is blocked; one successful route is not branch coverage.
+7. Compare observed deadlines, handled-event count, state deltas, and terminal state with every row of the final Gameplay Feasibility Ledger.
 
 ## Frequent failures
 
-| Symptom                                                               | Root cause                                                                       | Fix                                                                                         |
-| --------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| black canvas, no console error                                        | level never rendered after title                                                 | keep the RAF loop and call `renderer.render` every active frame                             |
-| ESC overlay opens but game stays paused                               | wrong scene key                                                                  | use the three-key fallback contract exactly                                                 |
-| image 404s                                                            | invented key or leading slash mismatch                                           | read the generated `asset-pack.json`; use its key/url                                       |
-| movement depends on frame rate                                        | raw per-frame displacement                                                       | multiply by capped `deltaSeconds`                                                           |
-| W moves opposite the camera's horizontal X direction after mouse look | the forward vector uses `+sin(yaw)` while three.js camera forward is `-sin(yaw)` | use `(-sin(yaw), -cos(yaw))` for forward and `(cos(yaw), -sin(yaw))` for right              |
-| a second run accumulates listeners or GPU resources                   | the previous scene instance was replaced without `dispose()`                     | call `dispose()` before rebuilding and keep textures under Preloader ownership              |
-| player leaves the road or crosses a pylon                             | movement bypasses `resolveMovement` or collision radii are missing               | route every XZ move through the resolver and keep SceneMap radii explicit                   |
-| route works only after repeated edge nudges                           | floor patches merely touch after player-radius shrink, or a target sits in collision | widen/reposition the authored patches and keep spawn, pickups, and finish centers playable |
-| acceptance reports dead config                                        | a field was copied or renamed without removing its old path                      | keep one canonical leaf, update its consumer, and delete the duplicate                      |
-| completion notes contradict the GDD body                              | Phase 6 appended differences without correcting stale design values              | reconcile the body in place, then keep the appendix only as change rationale                |
-| GDD names a Set, mesh coordinate, or UV behavior absent from source   | Phase 6 rewrote prose from memory instead of the final consumer                  | copy the detail from final source or remove it and keep only stable player-visible behavior |
-| GDD blames a template block that already matches the frozen baseline  | Phase 6 inferred provenance from its own edit history instead of a baseline diff | record path + SHA-256 + diff evidence, or attribute the reverted edit to this generated game |
-| huge GPU cost                                                         | uncapped DPR or oversized textures                                               | DPR <= 2; texture/display size <= 1024 squared                                              |
+| Symptom                                                               | Root cause                                                                           | Fix                                                                                          |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| black canvas, no console error                                        | level never rendered after title                                                     | keep the RAF loop and call `renderer.render` every active frame                              |
+| ESC overlay opens but game stays paused                               | wrong scene key                                                                      | use the three-key fallback contract exactly                                                  |
+| image 404s                                                            | invented key or leading slash mismatch                                               | read the generated `asset-pack.json`; use its key/url                                        |
+| movement depends on frame rate                                        | raw per-frame displacement                                                           | multiply by capped `deltaSeconds`                                                            |
+| W moves opposite the camera's horizontal X direction after mouse look | the forward vector uses `+sin(yaw)` while three.js camera forward is `-sin(yaw)`     | use `(-sin(yaw), -cos(yaw))` for forward and `(cos(yaw), -sin(yaw))` for right               |
+| a second run accumulates listeners or GPU resources                   | the previous scene instance was replaced without `dispose()`                         | call `dispose()` before rebuilding and keep textures under Preloader ownership               |
+| player leaves the road or crosses a pylon                             | movement bypasses `resolveMovement` or collision radii are missing                   | route every XZ move through the resolver and keep SceneMap radii explicit                    |
+| route works only after repeated edge nudges                           | floor patches merely touch after player-radius shrink, or a target sits in collision | widen/reposition the authored patches and keep spawn, pickups, and finish centers playable   |
+| acceptance reports dead config                                        | a field was copied or renamed without removing its old path                          | keep one canonical leaf, update its consumer, and delete the duplicate                       |
+| completion notes contradict the GDD body                              | Phase 6 appended differences without correcting stale design values                  | reconcile the body in place, then keep the appendix only as change rationale                 |
+| GDD names a Set, mesh coordinate, or UV behavior absent from source   | Phase 6 rewrote prose from memory instead of the final consumer                      | copy the detail from final source or remove it and keep only stable player-visible behavior  |
+| GDD blames a template block that already matches the frozen baseline  | Phase 6 inferred provenance from its own edit history instead of a baseline diff     | record path + SHA-256 + diff evidence, or attribute the reverted edit to this generated game |
+| huge GPU cost                                                         | uncapped DPR or oversized textures                                                   | DPR <= 2; texture/display size <= 1024 squared                                               |
