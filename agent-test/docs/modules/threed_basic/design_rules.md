@@ -51,6 +51,14 @@ distance checks are enough for pickups and static collision; do not introduce a
 physics dependency. Give every obstacle an explicit `collisionRadius` instead
 of deriving gameplay collision from rendered scale.
 
+Mathematical overlap is not a playable lane. Shrink every floor patch by the
+player collision radius, then require each authored neighbor pair to keep an
+intersection half-width of at least two player radii. The spawn, every required
+pickup center, and the finish trigger center must themselves be playable after
+that shrink and must sit outside every expanded obstacle circle. Do not place a
+finish center inside a lighthouse or other blocker and rely on the trigger
+radius reaching a thin boundary crescent.
+
 Every `gameConfig.json` leaf must have one literal runtime consumer. Do not keep
 aliases for the same value: if pickup code moves from
 `levelConfig.collectRadius` to another path, delete the old leaf in the same
@@ -73,6 +81,11 @@ After Phase 6 changes, reconcile the GDD body itself against the final
 `SceneMap`, config, asset-pack, and uninstrumented playthrough. Correct stale
 numbers and consumers in place; an appendix may explain why a value changed,
 but must not leave an older contradictory value as a second truth.
+
+Treat each `gameConfig.json` description as part of that final truth. If a
+consumer changes from a config leaf to a literal or another leaf, correct the
+description and every GDD consumer table instead of leaving the old consumer
+claim behind.
 
 Implementation details need source anchors, not memory. Before keeping an
 internal variable name, numeric mesh position, or texture behavior such as UV
