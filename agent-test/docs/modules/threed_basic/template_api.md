@@ -61,6 +61,12 @@ Each obstacle declares `collisionRadius` independently from visual `scale`.
 patch, subdivides long moves to prevent tunnelling, and slides along an
 unblocked axis. Dynamic bodies, impulses, and gravity remain v2 concerns.
 
+For a single authored route, neighboring patches are ordered path segments, not
+an arbitrary set. After subtracting the player radius from both patch radii,
+their intersection half-width must remain at least two player radii. Spawn,
+required pickup centers, and the finish center must pass the same floor and
+expanded-obstacle predicate used by `resolveMovement()`.
+
 ## Config ownership
 
 The shipped config is a starting contract, not a compatibility registry. Keep
