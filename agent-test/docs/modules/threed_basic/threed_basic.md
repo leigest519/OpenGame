@@ -58,11 +58,19 @@ Keep `CollisionResolver.ts` pure. Floor patches and obstacle circles come from
 `SceneMap.ts`; player radius comes from `gameConfig.json`. Do not replace this
 with a physics dependency in v1.
 
+Before the final playthrough, validate the authored route with the same player
+radius: shrink adjacent floor patches by that radius and require their
+intersection half-width to be at least two player radii. The spawn, required
+pickup centers, and finish center must be playable points outside expanded
+obstacle circles. A trigger radius overlapping a playable boundary does not
+make a finish center embedded in solid collision acceptable.
+
 Treat config as executable data. Keep the existing path when it already serves
 the intended value; if a generated design chooses a new path, update the code
 and remove the old path together. Never add `fogDensity`, a second pickup
 radius, or a duplicate collectible count while their existing equivalents stay
-in the file. Record the final leaf-to-consumer mapping in GDD completion notes.
+in the file. Record the final leaf-to-consumer mapping in GDD completion notes,
+and reconcile each config leaf's `description` against the same final consumer.
 
 ## Asset hookup
 
@@ -99,6 +107,7 @@ to make this check pass.
 | W moves opposite the camera's horizontal X direction after mouse look | the forward vector uses `+sin(yaw)` while three.js camera forward is `-sin(yaw)` | use `(-sin(yaw), -cos(yaw))` for forward and `(cos(yaw), -sin(yaw))` for right              |
 | a second run accumulates listeners or GPU resources                   | the previous scene instance was replaced without `dispose()`                     | call `dispose()` before rebuilding and keep textures under Preloader ownership              |
 | player leaves the road or crosses a pylon                             | movement bypasses `resolveMovement` or collision radii are missing               | route every XZ move through the resolver and keep SceneMap radii explicit                   |
+| route works only after repeated edge nudges                           | floor patches merely touch after player-radius shrink, or a target sits in collision | widen/reposition the authored patches and keep spawn, pickups, and finish centers playable |
 | acceptance reports dead config                                        | a field was copied or renamed without removing its old path                      | keep one canonical leaf, update its consumer, and delete the duplicate                      |
 | completion notes contradict the GDD body                              | Phase 6 appended differences without correcting stale design values              | reconcile the body in place, then keep the appendix only as change rationale                |
 | GDD names a Set, mesh coordinate, or UV behavior absent from source   | Phase 6 rewrote prose from memory instead of the final consumer                  | copy the detail from final source or remove it and keep only stable player-visible behavior |

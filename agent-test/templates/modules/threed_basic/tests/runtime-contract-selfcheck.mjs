@@ -47,5 +47,7 @@ assert.match(manual, /protected runtime\s+contracts/);
 assert.match(manual, /asset-pack\.json[\s\S]*relative URL/);
 assert.match(manual, /Baseline evidence:[\s\S]*SHA-256[\s\S]*diff result/);
 assert.match(manual, /generated edit that was reverted, not a[\s\S]*template defect/);
+assert.match(manual, /intersection half-width[\s\S]*two player radii/);
+assert.match(manual, /config leaf's `description`[\s\S]*final consumer/);
 
 console.log('threed_basic runtime contract self-check: PASS');
