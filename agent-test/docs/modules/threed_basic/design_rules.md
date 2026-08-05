@@ -2,9 +2,26 @@
 
 ## 1. Product shape
 
-Build one short, finishable 3D route: the player moves through a single world,
-collects every required item, and reaches one completion state. Use three.js,
-simple geometry, lights, fog, a sky texture, and DOM overlays.
+Build one short, finishable 3D experience around an explicit core loop. Use
+three.js, simple geometry, lights, fog, a sky texture, and DOM overlays.
+Collection is the reference scaffold fallback, not the archetype definition.
+
+Before assets or level coordinates, declare a Core Gameplay Contract:
+
+| Contract   | Required evidence                                                            |
+| ---------- | ---------------------------------------------------------------------------- |
+| Verbs      | what the player repeatedly does through keyboard/mouse input                 |
+| Loop       | one 20-60 second action-feedback-decision cycle that repeats at least twice  |
+| Demand     | one meaningful choice, timing, navigation, observation, or resource tradeoff |
+| Pressure   | an observable fail condition plus recovery or restart behavior               |
+| Feedback   | visible DOM/world response for progress, danger, success, and failure        |
+| Escalation | at least three authored beats that intensify the same loop                   |
+| Outcome    | exact reachable win and lose conditions                                      |
+
+Do not reskin move-and-collect when the prompt asks for avoidance, timing,
+switching, delivery, pursuit, defense, or another mechanic. Every private state
+field and declarative SceneMap array in the contract must name its final runtime
+consumer; do not invent a generic gameplay framework.
 
 Do not add physics, touch controls, multiplayer, imported 3D models, or any
 text-to-3D service. 2D Phaser templates are unrelated and must remain unchanged.
@@ -30,12 +47,12 @@ public API and implement the requested rule with the smallest private state in
 
 3D assets are still ordinary images produced by `generate_game_assets`.
 
-| Key role           | Tool type    | Max/source rule                                      | three.js use                     |
-| ------------------ | ------------ | ---------------------------------------------------- | -------------------------------- |
-| `skybox_texture`   | `background` | `1024*1024`; `displaySize: 1024*1024` in GDD         | equirectangular scene background |
-| `floor_patch`      | `image`      | generated image; declare display size <= `1024*1024` | `CircleGeometry` material map    |
-| `energy_billboard` | `image`      | one centered subject, transparent removal allowed    | `SpriteMaterial`                 |
-| surface texture    | `image`      | <= `1024*1024`; no glossy colormap                   | `MeshStandardMaterial.map`       |
+| Key role            | Tool type    | Max/source rule                                                 | three.js use                     |
+| ------------------- | ------------ | --------------------------------------------------------------- | -------------------------------- |
+| `skybox_texture`    | `background` | `1024*1024`; `displaySize: 1024*1024` in GDD                    | equirectangular scene background |
+| `floor_patch`       | `image`      | generated image; declare display size <= `1024*1024`            | `CircleGeometry` material map    |
+| objective billboard | `image`      | semantic key, one centered subject, transparent removal allowed | `SpriteMaterial`                 |
+| surface texture     | `image`      | <= `1024*1024`; no glossy colormap                              | `MeshStandardMaterial.map`       |
 
 Never request a model, mesh, GLB, FBX, normal map, or text-to-3D output. Do not
 use `colormap` for glossy, translucent, emissive, or sky assets.
@@ -45,7 +62,10 @@ never inline real media as Base64 or a Data URL in source, config, HTML, or GDD.
 
 ## 4. Level and camera budget
 
-Use 8-14 floor patches, 5-10 collectibles, and 8-16 low-poly decorations.
+Use 8-14 floor patches and 8-16 low-poly decorations. Add only the objective,
+hazard, switch, gate, patrol, trigger, or collectible entries consumed by the
+chosen loop; do not keep the scaffold collectible budget when collection is not
+the mechanic.
 Keep the camera far plane under 250 and cap device pixel ratio at 2. Manual
 distance checks are enough for pickups and static collision; do not introduce a
 physics dependency. Give every obstacle an explicit `collisionRadius` instead
