@@ -1230,9 +1230,12 @@ End Section 4 with: \`3D scope: primitives + generated image textures; no model 
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      thinking: { type: 'enabled' },
-      temperature: this.modelConfig.temperature ?? 0.7,
-      max_tokens: 10000,
+      // GDD responses must leave the model's output budget for the document.
+      // kimi-k3 can otherwise spend all 32K tokens on hidden reasoning and
+      // return no content, which makes the six-stage pipeline retry forever.
+      thinking: { type: 'disabled' },
+      temperature: this.modelConfig.temperature ?? 0.6,
+      max_tokens: 32000,
       stream: false,
     };
 
@@ -1295,7 +1298,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
       apiKey: resolved.apiKey,
       baseUrl: resolved.baseUrl,
       modelName: resolved.model,
-      temperature: 0.5,
+      temperature: 0.6,
       timeout: 60000,
     };
   }

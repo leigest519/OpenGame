@@ -1,8 +1,49 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { Config } from '../config/config.js';
 import {
   configMergeInstruction,
+  GenerateGDDTool,
   gameplaySemanticsInstruction,
 } from './generate-gdd.js';
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe('GenerateGDDTool request', () => {
+  it('reserves the output budget for GDD content', async () => {
+    const fetchMock = vi.fn(
+      async (_input: string | URL | Request, init?: RequestInit) => {
+        const payload = JSON.parse(String(init?.body));
+        expect(payload).toMatchObject({
+          thinking: { type: 'disabled' },
+          temperature: 0.6,
+          max_tokens: 32000,
+        });
+        return new Response(
+          JSON.stringify({ choices: [{ message: { content: '# Test GDD' } }] }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } },
+        );
+      },
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const config = { getProjectRoot: () => process.cwd() } as Config;
+    const tool = new GenerateGDDTool(config, {
+      apiKey: 'test-key',
+      baseUrl: 'https://example.invalid/v1',
+      modelName: 'kimi-k3',
+      temperature: 0.6,
+    });
+    const result = await tool
+      .build({ raw_user_requirement: 'test game', archetype: 'threed_basic' })
+      .execute(new AbortController().signal);
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(result.error).toBeUndefined();
+    expect(result.llmContent).toContain('# Test GDD');
+  });
+});
 
 describe('configMergeInstruction', () => {
   it('requires consumed config and deletion of superseded 3D leaves', () => {
