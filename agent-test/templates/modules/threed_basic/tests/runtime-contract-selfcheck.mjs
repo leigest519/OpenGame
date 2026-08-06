@@ -42,6 +42,10 @@ assert.match(moduleScene, /this\.input\.dispose\(\)/);
 assert.match(moduleScene, /object\.geometry\.dispose\(\)/);
 assert.match(moduleScene, /material\.dispose\(\)/);
 assert.match(coreMain, /this\.game\?\.dispose\(\)/);
+assert(
+  coreMain.indexOf('this.ui.show') < coreMain.indexOf('this.game = new GameScene'),
+  'HUD must exist before GameScene emits its initial progress event',
+);
 assert.match(coreScene, /this\.renderer\.dispose\(\)/);
 assert.match(manual, /protected runtime\s+contracts/);
 assert.match(manual, /asset-pack\.json[\s\S]*relative URL/);

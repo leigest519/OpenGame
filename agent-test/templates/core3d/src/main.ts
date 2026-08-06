@@ -42,6 +42,8 @@ class GameApp {
   private start(): void {
     if (!this.container) return;
     this.ended = false;
+    this.ui.init({ gameSceneKey: 'GameScene' });
+    this.ui.show((key) => this.pause(key));
     this.game = new GameScene(
       this.container,
       {
@@ -59,8 +61,6 @@ class GameApp {
       },
       this.preloader.textures,
     );
-    this.ui.init({ gameSceneKey: 'GameScene' });
-    this.ui.show((key) => this.pause(key));
     window.__opengame3d = {
       isPaused: () => this.game?.isPaused() ?? false,
       renderer: 'three.js',
