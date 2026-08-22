@@ -59,7 +59,7 @@ export class TongyiImageService extends BaseService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
         'X-DashScope-Async': 'enable',
       },
       body: JSON.stringify(payload),
@@ -84,7 +84,7 @@ export class TongyiImageService extends BaseService {
 
     const taskUrl = `${this.config.baseUrl}/api/v1/tasks/${taskId}`;
     const result = await this.pollTaskStatus(taskUrl, {
-      Authorization: `Bearer ${this.config.apiKey}`,
+      Authorization: `${this.config.apiKey}`,
     });
 
     const resultUrl = result.output?.results?.[0]?.url;
@@ -122,7 +122,7 @@ export class TongyiImageService extends BaseService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
       },
       body: JSON.stringify(payload),
     });
@@ -208,7 +208,7 @@ export class TongyiImageService extends BaseService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
         'X-DashScope-Async': 'enable',
       },
       body: JSON.stringify(payload),
@@ -233,7 +233,7 @@ export class TongyiImageService extends BaseService {
 
     const taskUrl = `${this.config.baseUrl}/api/v1/tasks/${taskId}`;
     const result = await this.pollTaskStatus(taskUrl, {
-      Authorization: `Bearer ${this.config.apiKey}`,
+      Authorization: `${this.config.apiKey}`,
     });
 
     const resultUrl = result.output?.results?.[0]?.url;
@@ -272,7 +272,7 @@ export class TongyiImageService extends BaseService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
         'X-DashScope-Async': 'enable',
       },
       body: JSON.stringify(payload),
@@ -295,7 +295,7 @@ export class TongyiImageService extends BaseService {
 
     const taskUrl = `${this.config.baseUrl}/api/v1/tasks/${taskId}`;
     const result = await this.pollTaskStatus(taskUrl, {
-      Authorization: `Bearer ${this.config.apiKey}`,
+      Authorization: `${this.config.apiKey}`,
     });
 
     const resultUrl = result.output?.results?.[0]?.url;

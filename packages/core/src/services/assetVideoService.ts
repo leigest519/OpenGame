@@ -75,7 +75,7 @@ export class TongyiVideoService extends BaseService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
         'X-DashScope-Async': 'enable',
       },
       body: JSON.stringify(payload),
@@ -102,7 +102,7 @@ export class TongyiVideoService extends BaseService {
     const result = await this.pollTaskStatus(
       taskUrl,
       {
-        Authorization: `Bearer ${this.config.apiKey}`,
+        Authorization: `${this.config.apiKey}`,
       },
       600000,
       10000,
