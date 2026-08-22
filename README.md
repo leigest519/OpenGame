@@ -31,7 +31,7 @@ Jiaming Han, Tianshuo Peng, Kaixuan Fan, Manyuan Zhang, Xiangyu Yue*
 
 ## 📢 News
 
-* **[2026-04-21]** 🚀 We have officially released the **OpenGame** framework! You can now access our [Project Page](https://www.opengame-project-page.com/), read the [arXiv Paper](https://arxiv.org/abs/2604.18394), and start generating your own web games end-to-end.
+* **[2026-04-21]** 🚀 We have officially released the **OpenGame** framework! You can now access our [Project Page](https://yelonlft.github.io/OpenGame-landing-page/), read the [arXiv Paper](https://arxiv.org/abs/2604.18394), and start generating your own web games end-to-end.
 ## Playable Demos
 
 A curated gallery of web games generated end-to-end by OpenGame from a single prompt. Hover any tile to preview the gameplay; click through for the live build or the full source archive used by the agent.
@@ -49,7 +49,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Choose your superhero. Clear stages with epic beatdowns and crush the mastermind.<br/>选择你的超级英雄，清除关卡并击败Boss。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_platformer_marvel.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
@@ -66,7 +66,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Cast spell cards by answering trivia correctly. Chain combos for bonus damage.<br/>正确答题释放魔法卡牌，连续答对触发魔力共振连击。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_uiHeavy_harryPotter.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
@@ -85,7 +85,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Two players race to buzz in and answer physics questions. Right answers deal damage; wrong answers backfire.<br/>双人抢答物理题，答对造成伤害，答错反噬自身。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_uiHeavy_kombat.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
@@ -102,7 +102,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Deploy cat towers to defend the Golden Tuna Can from waves of household invaders.<br/>部署猫猫炮塔，保卫金枪鱼罐头抵御入侵者。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_towerDefense_hajimi.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
@@ -121,7 +121,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Fight through the Imperial Base as the Mandalorian. Shoot, slash, and dash to rescue Grogu.<br/>扮演曼达洛人突入帝国基地，射击、喷射闪避，营救古古。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_topDown_starWars.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
@@ -138,7 +138,7 @@ A curated gallery of web games generated end-to-end by OpenGame from a single pr
         <p><b>Intro:</b> Run when she sings, freeze when she turns. One wrong move and you're eliminated.<br/>她唱歌时跑，她转头时定住。一步走错，当场淘汰。</p>
       </div>
       <p align="center">
-        <a href="https://www.opengame-project-page.com/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
+        <a href="https://yelonlft.github.io/OpenGame-landing-page/#demo"><b>▶&nbsp;&nbsp;Live Demo</b></a>
         &nbsp;&nbsp;·&nbsp;&nbsp;
         <a href="https://github.com/leigest519/OpenGame/raw/main/assets/downloads/demo_topDown_squidGame.zip"><b>↓&nbsp;&nbsp;Source</b></a>
       </p>
