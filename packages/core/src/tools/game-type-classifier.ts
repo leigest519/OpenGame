@@ -44,14 +44,15 @@ export type GameArchetype =
   | 'top_down'
   | 'grid_logic'
   | 'tower_defense'
-  | 'ui_heavy';
+  | 'ui_heavy'
+  | 'threed_basic';
 
 export interface ClassificationResult {
   archetype: GameArchetype;
   reasoning: string;
   physicsProfile: {
     hasGravity: boolean;
-    perspective: 'side' | 'top_down' | 'none';
+    perspective: 'side' | 'top_down' | 'three_dimensional' | 'none';
     movementType: 'continuous' | 'grid' | 'path' | 'ui_only';
   };
 }
@@ -173,12 +174,21 @@ You are a game physics analyzer. Your job is to classify games based on their PH
 
 **Key Question**: Is the game primarily UI panels and state changes?
 
+### 6. threed_basic (Explicit 3D World)
+**Physics**: No physics engine; simple geometry and manual collision bounds
+**Perspective**: First-person, third-person, or freely moving camera in a three-dimensional world
+**Movement**: Keyboard movement plus mouse look/steering
+**Examples**: three.js maze roaming, low-poly floating-island treasure hunt, neon 3D collection runner
+
+**Key Question**: Does the request explicitly require 3D, three.js, a 3D camera, or movement through a three-dimensional world?
+**Priority Rule**: Explicit 3D intent wins over genre words such as maze, platformer, runner, or racing. Do not classify ordinary 2D Phaser games as threed_basic.
+
 ## Output Format
 
 Respond with ONLY a JSON object (no markdown, no explanation outside JSON):
 
 {
-  "archetype": "platformer" | "top_down" | "grid_logic" | "tower_defense" | "ui_heavy",
+  "archetype": "platformer" | "top_down" | "grid_logic" | "tower_defense" | "ui_heavy" | "threed_basic",
   "reasoning": "Brief explanation of why this archetype was chosen based on physics",
   "physicsProfile": {
     "hasGravity": true | false,
@@ -194,6 +204,8 @@ Respond with ONLY a JSON object (no markdown, no explanation outside JSON):
 - Hill Climb Racing is NOT top_down (it has gravity, it's platformer)
 - SimCity/Factorio are grid_logic (grid-based building), not top_down
 - Racing games: If side-view with gravity = platformer, if top-down = top_down
+- A "three.js maze roaming" request is threed_basic, not grid_logic or top_down
+- A normal 2D side-view Phaser platformer remains platformer
 `;
   }
 
@@ -202,7 +214,7 @@ Respond with ONLY a JSON object (no markdown, no explanation outside JSON):
 
 "${this.params.game_description}"
 
-Remember: Think about GRAVITY, PERSPECTIVE, and MOVEMENT TYPE. Output JSON only.`;
+Remember: Explicit 3D/three.js intent takes priority; otherwise use GRAVITY, PERSPECTIVE, and MOVEMENT TYPE. Output JSON only.`;
   }
 
   private async callClassifierModel(
@@ -280,6 +292,7 @@ Remember: Think about GRAVITY, PERSPECTIVE, and MOVEMENT TYPE. Output JSON only.
     } catch {
       // Fallback: try to extract archetype from text
       const archetypes: GameArchetype[] = [
+        'threed_basic',
         'platformer',
         'top_down',
         'grid_logic',
@@ -293,7 +306,12 @@ Remember: Think about GRAVITY, PERSPECTIVE, and MOVEMENT TYPE. Output JSON only.
             reasoning: result,
             physicsProfile: {
               hasGravity: arch === 'platformer',
-              perspective: arch === 'platformer' ? 'side' : 'top_down',
+              perspective:
+                arch === 'threed_basic'
+                  ? 'three_dimensional'
+                  : arch === 'platformer'
+                    ? 'side'
+                    : 'top_down',
               movementType: arch === 'grid_logic' ? 'grid' : 'continuous',
             },
           };
@@ -317,6 +335,9 @@ Remember: Think about GRAVITY, PERSPECTIVE, and MOVEMENT TYPE. Output JSON only.
     const templatesDir = process.env.GAME_TEMPLATES_DIR || '../../templates';
     const docsDir = process.env.GAME_DOCS_DIR || '../../docs';
 
+    const coreTemplate =
+      result.archetype === 'threed_basic' ? 'core3d' : 'core';
+
     return `<classification>
 Archetype: ${result.archetype}
 Reasoning: ${result.reasoning}
@@ -330,13 +351,13 @@ Physics Profile:
 <system-reminder>
 GAME TYPE CLASSIFIED: **${result.archetype}**
 
-## Next Step: Scaffold Templates (FOUR commands)
+## Next Step: Scaffold Templates
 
 Run these commands NOW:
 
 \`\`\`bash
 # Step 1: Copy core template (creates src/, public/, config files)
-cp -r ${templatesDir}/core/* ./
+cp -r ${templatesDir}/${coreTemplate}/* ./
 
 # Step 2: Copy module-specific code INTO src/ (ADDITIVE merge)
 cp -r ${templatesDir}/modules/${result.archetype}/src/* ./src/
@@ -349,6 +370,9 @@ cp ${docsDir}/asset_protocol.md ${docsDir}/debug_protocol.md docs/
 # Step 4: Copy module-specific documentation
 mkdir -p docs/modules/${result.archetype}
 cp -r ${docsDir}/modules/${result.archetype}/* docs/modules/${result.archetype}/
+
+# three.js is pinned in core3d/package-lock.json; install only inside this game workspace.
+if [ "${result.archetype}" = "threed_basic" ]; then npm ci; fi
 \`\`\`
 
 ## After Scaffolding: Proceed to Phase 2 (GDD Generation)
@@ -369,6 +393,7 @@ Next: Call \`generate-gdd\` tool with:
       grid_logic: 'Grid + Static Logic (Sokoban, Fire Emblem, Match-3)',
       tower_defense: 'Path + Waves (Kingdom Rush, Bloons TD)',
       ui_heavy: 'UI Driven (Card Games, Visual Novels, Idle Clickers)',
+      threed_basic: '3D World + Manual Movement (three.js primitives)',
     };
 
     return `**Game Type Classification**
@@ -422,7 +447,7 @@ export class GameTypeClassifierTool extends BaseDeclarativeTool<
     super(
       GameTypeClassifierTool.Name,
       ToolDisplayNames.GAME_TYPE_CLASSIFIER,
-      `Classifies a game idea into an archetype based on PHYSICS and PERSPECTIVE (not genre name). Returns: platformer (side+gravity), top_down (free movement), grid_logic (discrete tiles), tower_defense (path+waves), or ui_heavy (no physics). Call this FIRST before scaffolding templates.`,
+      `Classifies a game idea into an archetype based on DIMENSION, PHYSICS, and PERSPECTIVE (not genre name). Returns: platformer (side+gravity), top_down (free movement), grid_logic (discrete tiles), tower_defense (path+waves), ui_heavy (no physics), or threed_basic (explicit three.js/3D world). Call this FIRST before scaffolding templates.`,
       Kind.Think,
       {
         type: 'object',

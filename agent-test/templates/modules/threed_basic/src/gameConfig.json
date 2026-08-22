@@ -1,0 +1,15 @@
+{
+  "renderConfig": {
+    "pixelRatioCap": { "value": 2, "type": "number", "description": "Renderer pixel ratio cap" },
+    "fogNear": { "value": 16, "type": "number", "description": "Fog near distance" },
+    "fogFar": { "value": 82, "type": "number", "description": "Fog far distance" }
+  },
+  "playerConfig": {
+    "moveSpeed": { "value": 9, "type": "number", "description": "Movement units per second" },
+    "mouseSensitivity": { "value": 0.002, "type": "number", "description": "Mouse look sensitivity" },
+    "collisionRadius": { "value": 0.45, "type": "number", "description": "Player radius for XZ collision" }
+  },
+  "levelConfig": {
+    "collectRadius": { "value": 1.8, "type": "number", "description": "Manual pickup radius" }
+  }
+}
