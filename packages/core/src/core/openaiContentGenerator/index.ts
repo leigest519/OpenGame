@@ -13,6 +13,7 @@ import { OpenAIContentGenerator } from './openaiContentGenerator.js';
 import {
   DashScopeOpenAICompatibleProvider,
   DeepSeekOpenAICompatibleProvider,
+  EvoLinkOpenAICompatibleProvider,
   ModelScopeOpenAICompatibleProvider,
   OpenRouterOpenAICompatibleProvider,
   type OpenAICompatibleProvider,
@@ -26,6 +27,7 @@ export {
   type OpenAICompatibleProvider,
   DashScopeOpenAICompatibleProvider,
   DeepSeekOpenAICompatibleProvider,
+  EvoLinkOpenAICompatibleProvider,
   OpenRouterOpenAICompatibleProvider,
 } from './provider/index.js';
 
@@ -66,6 +68,13 @@ export function determineProvider(
 
   if (DeepSeekOpenAICompatibleProvider.isDeepSeekProvider(config)) {
     return new DeepSeekOpenAICompatibleProvider(
+      contentGeneratorConfig,
+      cliConfig,
+    );
+  }
+
+  if (EvoLinkOpenAICompatibleProvider.isEvoLinkProvider(config)) {
+    return new EvoLinkOpenAICompatibleProvider(
       contentGeneratorConfig,
       cliConfig,
     );

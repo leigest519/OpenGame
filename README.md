@@ -217,6 +217,14 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"     # optional
 export OPENAI_MODEL="gpt-4o"                            # optional, swap in GameCoder-27B when running it locally
 ```
 
+For EvoLink, use its OpenAI-compatible language endpoint:
+
+```bash
+export OPENAI_API_KEY="your-evolink-api-key"
+export OPENAI_BASE_URL="https://direct.evolink.ai/v1"
+export OPENAI_MODEL="gpt-5.2"
+```
+
 #### Asset / GDD provider keys (image, video, audio, reasoning)
 
 Beyond the main agent LLM, OpenGame's asset-generation tools talk to image,
