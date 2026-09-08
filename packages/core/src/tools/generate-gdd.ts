@@ -20,7 +20,8 @@ export type GameArchetype =
   | 'top_down'
   | 'grid_logic'
   | 'tower_defense'
-  | 'ui_heavy';
+  | 'ui_heavy'
+  | 'threed_basic';
 
 export interface GenerateGDDParams {
   /**
@@ -38,6 +39,18 @@ export interface GenerateGDDParams {
    * Tool will auto-load archetype-specific rules if not provided
    */
   config_summary?: string;
+}
+
+export function configMergeInstruction(archetype: GameArchetype): string {
+  if (archetype === 'threed_basic') {
+    return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json`; every leaf must have a runtime consumer, and renamed or superseded leaves must be removed in the same edit. Derive authored counts from `SceneMap` arrays: do not add a config count leaf merely to mirror or assert an authored array `.length`; keep a count in config only when gameplay consumes it as a separate completion threshold.';
+  }
+  return '- MERGE GDD Section 2 values INTO the existing `src/gameConfig.json` -- add/update game-specific fields using `{ "value": X }` wrapper format, but NEVER delete infrastructure fields (`screenSize`, `renderConfig`, and Phaser\'s `debugConfig`)';
+}
+
+export function gameplaySemanticsInstruction(archetype: GameArchetype): string {
+  if (archetype !== 'threed_basic') return '';
+  return '5. **3D Gameplay Contract**: Do not default to the scaffold pickup loop unless the user asks for collection. Declare the player verbs, a repeatable 20-60 second core loop, one meaningful decision or skill demand, pressure and an observable failure condition, recovery/restart feedback, at least three escalating beats, and exact win/lose conditions. Write the loop as cue -> player action -> decision -> state change -> feedback -> repeat, not as theme prose. If the user explicitly requests a no-fail experience, state that constraint and define tension plus recovery/progression instead of inventing game over. Map every gameplay state and authored array to a final `GameScene` or DOM consumer. Public API limits forbid new external hooks, not private state inside `GameScene`; preserve explicit mechanics such as ordered or sequential objectives, and never weaken the user requirement to match the scaffold. Treat camera near/far as source literals unless the final code reads a named config leaf; fog or DPR leaves do not make camera far config-backed. For a branched choice, list intended neighbor pairs and forbidden cross-lane transitions under the player-radius-shrunk collision predicate, then play every branch and attempt any claimed blocked switch before calling the decision meaningful. Before calling the loop playable, add a Gameplay Feasibility Ledger with one complete winning trace and one losing or counterfactual trace. Each row must name the cue/deadline, required input or route, derived traversal/action time, resource or health delta, and resulting state. Label every trace DERIVED or OBSERVED; only the exact route, strategy, and terminal state exercised through keyboard/mouse input on the final uninstrumented artifact may be OBSERVED PASS. A substitute route, stand-in mechanic, or partial cycle proves only the shared transitions it actually exercised and must not upgrade the target trace to observed. Derived traces must carry state across escalation thresholds and recompute later timing/damage with the resulting beat or phase, rather than freezing the initial rate. Derive the budget from final SceneMap distances/timings and config speed/damage/recovery values; handled-action counts must equal the authored event count. Recompute the ledger after every tuning edit and reconcile the GDD body against the final uninstrumented playthrough; observed terminal values override conflicting estimates. Acceptance must preserve the declared win condition: never strengthen, replace, or contradict it, and optional objectives must not become pass gates. A complete-playthrough PASS must run against the final uninstrumented artifact; diagnostic probes must not be a prerequisite for PASS.';
 }
 
 export interface GDDModelConfig {
@@ -111,11 +124,11 @@ Save content between <gdd-content> tags to \`GAME_DESIGN.md\`
 ### Phase 3: Assets (use GDD Section 1)
 - Read \`{DOCS_DIR}/asset_protocol.md\`
 - Call \`generate_game_assets\` with the Asset Registry table from **GDD Section 1**
-- Call \`generate_tilemap\` with ASCII maps from **GDD Section 4** (NOT for ui_heavy, tower_defense, or grid_logic -- these use code-defined grids)
+- Call \`generate_tilemap\` with ASCII maps from **GDD Section 4** (NOT for ui_heavy, tower_defense, grid_logic, or threed_basic)
 - Read \`public/assets/asset-pack.json\` for generated texture keys
 
 ### Phase 4: Config (use GDD Section 2)
-- MERGE GDD Section 2 values INTO the existing \`src/gameConfig.json\` -- add/update game-specific fields using \`{ "value": X }\` wrapper format, but NEVER delete infrastructure fields (\`screenSize\`, \`debugConfig\`, \`renderConfig\`)
+${configMergeInstruction(this.params.archetype)}
 
 ### Phase 5: Code Implementation (use GDD Sections 0, 3, 5)
 - **GDD Section 0** has scene keys -> update \`LevelManager.ts\` and \`main.ts\`
@@ -228,6 +241,9 @@ You are a game design engineer. Produce a **Technical Game Design Document** —
 4. **Hook Integrity**: Every hook name MUST exist in template_api.md. Non-existent hooks cause compilation failure.
 
 `;
+
+    const semanticsInstruction = gameplaySemanticsInstruction(archetype);
+    if (semanticsInstruction) prompt += `${semanticsInstruction}\n\n`;
 
     if (coreRules) {
       prompt += `---\n\n## Universal GDD Rules\n\n${coreRules}\n\n`;
@@ -624,6 +640,19 @@ Tower Defense does NOT use generate_tilemap -- maps are code-defined grids.
 - If template_api.md doesn't list a hook, it DOES NOT EXIST -- design around existing hooks only
 
 `,
+      threed_basic: `---
+
+## Three.js Basic Rules (Built-in)
+
+- Runtime: pinned three.js + TypeScript + Vite; do not import Phaser.
+- World: primitives/custom low-poly geometry, one PerspectiveCamera, ambient + directional light, fog, and a sky texture.
+- Input: WASD/arrows + mouse; ESC uses the existing DOM pause contract. No touch controls.
+- Gameplay: one short, explicit core loop with player verbs, pressure/failure, feedback, escalation, and reachable win/lose states; collection is only the reference fallback.
+- Collision: manual bounds/proximity only. Do not add a physics engine.
+- Assets: use generate_game_assets only for skybox/texture/billboard/floor patch images. No models, GLB/FBX/OBJ, text-to-3D, or generate_tilemap.
+- Architecture: keep main.ts RAF wiring; put declarative positions in SceneMap.ts and rendering/gameplay in GameScene.ts.
+- Required verification: build, WebGL context, non-black canvas, zero console errors, and ESC pause/resume.
+`,
     };
 
     return rules[archetype] || '';
@@ -711,6 +740,12 @@ ${this.getSection4Guidance(archetype)}`;
 { "type": "image", "key": "icon_tower_tabby", "description": "Icon for Spitfire Tabby tower selection UI: small version of tabby cat" }
 { "type": "image", "key": "tower_slot", "description": "A round stone platform with subtle moss, top-down view" }
 \`\`\``,
+      threed_basic: `**Three.js image asset rules:**
+- Skybox: \`type: "background"\`, key \`skybox_texture\`, equirectangular, \`resolution: "1024*1024"\`.
+- Floor patch/surface: \`type: "image"\`, key \`floor_patch\`; declare runtime \`displaySize\` in the GDD, never pass it to the tool.
+- Interactive/objective billboard: \`type: "image"\`, one centered subject and a semantic key; \`energy_billboard\` is only the collection scaffold fallback.
+- Keep source/display size <= 1024*1024. Colormap only matte art; never glossy/translucent/emissive/sky art.
+- Every generated image must remain in asset-pack.json. Do not request models, meshes, normal maps, or text-to-3D output.`,
     };
     return guidance[archetype] || '';
   }
@@ -722,6 +757,7 @@ ${this.getSection4Guidance(archetype)}`;
       top_down: 'Entity Architecture (Behavior Composition)',
       grid_logic: 'Entity Architecture (Grid Logic)',
       tower_defense: 'Entity Architecture (Towers & Waves)',
+      threed_basic: '3D Scene Architecture (SceneMap + GameScene)',
     };
     return titles[archetype] || 'Entity Architecture';
   }
@@ -867,6 +903,13 @@ Refer to Design Guide Section 7 for screen shake rules, Template Capabilities Se
   - \`getCellsInRadius(x, y, radius, w, h)\`: cells in area (AoE effects)
 
 **CRITICAL**: Every hook name must exist in template_api.md. Do NOT invent hooks.`,
+      threed_basic: `Start with a Core Gameplay Contract table: player verbs, 20-60 second repeated loop, decision/skill demand, pressure, failure and recovery, visible feedback, three escalating beats, and exact win/lose conditions. If the prompt explicitly requires no-fail play, record that constraint and specify tension plus recovery/progression instead. Do not use collection unless the prompt calls for it.
+
+Define the exact \`SceneMap.ts\` arrays required by that loop (floorPatches and obstacles plus only real objective/hazard/trigger arrays), the \`GameScene\` state transitions and consumers, texture-key mapping, camera start/bounds, and completion/failure conditions. Every declared state and array needs a final runtime consumer. Add a Gameplay Feasibility Ledger for one winning trace and one losing/counterfactual trace: cue/deadline, required input/route, derived action time, resource delta, and resulting state. Derive it from the final authored distances/timings and config speed/damage/recovery values, and make handled-action totals equal the authored event count.
+
+For branched routes, list intended neighboring floor-patch pairs and forbidden cross-lane transitions, then require the final uninstrumented play check to complete every branch and attempt any claimed blocked switch. Never call a route choice committed when the final collision geometry permits lane switching. Treat camera near/far as source literals unless final code reads an exact named config leaf; fog and DPR config are not camera-far consumers.
+
+Use only the public constructor and methods from template_api.md: \`update\`, \`setPaused\`, \`isPaused\`, and \`resize\`. Preserve main.ts RAF and DOM-screen wiring. List exact config fields and values; do not invent editor/runtime hooks. After any tuning edit, recompute the ledger and reconcile its counts, terminal state, and GDD body against the final uninstrumented playthrough.`,
       tower_defense: `Define every tower type, enemy type, and level scene with EXACT configurations. This maps directly to code files.
 
 **For each Tower Type** (COPY \`_TemplateTower.ts\` -> \`TowerName.ts\`):
@@ -932,6 +975,7 @@ if (slowAmt && slowDur) enemy.applyStatusEffect('slow', slowAmt, slowDur, 0x4488
       top_down: 'Level Design',
       grid_logic: 'Level & Puzzle Design (Code-Defined Grid)',
       tower_defense: 'Map & Wave Design',
+      threed_basic: '3D Level & Gameplay Loop',
     };
     return titles[archetype] || 'Level Design';
   }
@@ -1161,6 +1205,16 @@ List which tower types are available in each level. Early levels may restrict to
 - Starting gold: 80-200 (higher = easier)
 - Kill rewards: 5-50g per enemy type
 - Wave clear bonuses: 10-100g per wave`,
+      threed_basic: `**Do not use generate_tilemap.** Provide one declarative level for \`initSceneMap()\` that executes the Section 3 Core Gameplay Contract:
+- 8-14 overlapping floor patches with x/z/radius values
+- only the objective, hazard, switch, gate, patrol, or trigger arrays actually consumed by the chosen loop; collectibles are optional
+- 8-16 low-poly obstacle decorations outside the main walking line
+- camera start, track bounds, exact gameplay radii/timings, and reachable win/lose positions
+- at least three authored beats showing how pressure or decisions escalate without changing the core verbs
+- for a branched route, intended neighbor pairs and forbidden cross-lane transitions after player-radius shrink
+- manual play paths proving every branch, any claimed blocked switch, failure/recovery (or declared no-fail pressure response), and the win condition through keyboard/mouse input
+
+End Section 4 with: \`3D scope: primitives + generated image textures; no model generation\`.`,
     };
     return guidance[archetype] || '';
   }
@@ -1176,9 +1230,12 @@ List which tower types are available in each level. Early levels may restrict to
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      thinking: { type: 'enabled' },
-      temperature: this.modelConfig.temperature ?? 0.7,
-      max_tokens: 10000,
+      // GDD responses must leave the model's output budget for the document.
+      // kimi-k3 can otherwise spend all 32K tokens on hidden reasoning and
+      // return no content, which makes the six-stage pipeline retry forever.
+      thinking: { type: 'disabled' },
+      temperature: this.modelConfig.temperature ?? 0.6,
+      max_tokens: 32000,
       stream: false,
     };
 
@@ -1241,7 +1298,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
       apiKey: resolved.apiKey,
       baseUrl: resolved.baseUrl,
       modelName: resolved.model,
-      temperature: 0.5,
+      temperature: 0.6,
       timeout: 60000,
     };
   }
@@ -1271,6 +1328,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
               'grid_logic',
               'tower_defense',
               'ui_heavy',
+              'threed_basic',
             ],
           },
           config_summary: {
@@ -1306,6 +1364,7 @@ export class GenerateGDDTool extends BaseDeclarativeTool<
       'grid_logic',
       'tower_defense',
       'ui_heavy',
+      'threed_basic',
     ];
     if (!validArchetypes.includes(params.archetype)) {
       return `Invalid archetype: ${params.archetype}. Must be one of: ${validArchetypes.join(', ')}`;

@@ -37,6 +37,30 @@ If generating \*too many assets**, split into **2 separate tool calls\*\* to avo
 | `image`      | `key`, `description`                                               | PNG 386\*560 (portrait)    | Yes                |
 | `audio`      | `key`, `description`, `audioType`, `duration?`, `genre?`, `tempo?` | WAV (8-bit chiptune)       | N/A                |
 
+### 1.2.0 3D Image Assets (`threed_basic`)
+
+Three.js games use the same `generate_game_assets` image pipeline. These are
+2D images applied to geometry; they are not 3D models and do not create a new
+tool type.
+
+| 3D role | Existing type | Required description/runtime contract |
+|---|---|---|
+| skybox | `background` | equirectangular sky texture, `1024*1024`, no background removal |
+| surface texture | `image` | seamless or centered surface art, runtime display/source <= `1024*1024` |
+| billboard sprite | `image` | one centered subject, transparent background/removal allowed |
+| circular floor patch | `image` | top-down circular patch, transparent outside edge |
+
+- Asset Registry `displaySize` remains GDD/runtime metadata; never pass it as
+  an unsupported MCP parameter. Source textures and declared display size must
+  not exceed `1024*1024`.
+- Keep every 3D image in the normal Asset Registry/display list and generated
+  `asset-pack.json`; key and URL consistency rules below are unchanged.
+- `colormap` is allowed only for matte/non-glossy art. Never colormap glossy,
+  translucent, emissive, metallic, or skybox art.
+- Allowed runtime consumers are `Texture`, `MeshStandardMaterial.map`, scene
+  background, and `SpriteMaterial`. Never request GLB/FBX/OBJ, normal maps,
+  model generation, or a text-to-3D API.
+
 **CRITICAL — Parameter restrictions:**
 
 - `type: "image"` accepts ONLY `key` and `description`. **Do NOT pass `size`, `resolution`, or any other parameter** — the output is always 386\*560 PNG. Game code scales the image via `setScale()` or `setDisplaySize()`. Icons, projectiles, and small sprites all use the same output size; scale in code.

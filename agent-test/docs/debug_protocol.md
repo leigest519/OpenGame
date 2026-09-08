@@ -170,6 +170,18 @@ asset-pack.json → animations.json → Character.ts animKeys
 3. Use browser tools to verify visual behavior
 4. Continue with other tasks while server runs
 
+### 2.2 Screenshot Evidence Is Path-Only
+
+- Save screenshots as files under the current game workspace and report their
+  relative paths. Never embed real media in source, config, HTML, Markdown, or
+  chat/tool output.
+- Never call `ReadMediaFile` or another media-read tool for screenshots, even
+  after compression or through a sub-agent. That still injects Base64/Data URLs
+  into the generation session.
+- Use smoke's WebGL, non-blank pixel, error-array, and visible-DOM assertions for
+  automated verification. Human visual review happens outside the generation
+  session by opening the reported path.
+
 ---
 
 ## 3. Test Infrastructure
