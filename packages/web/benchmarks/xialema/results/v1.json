@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-10-13T20:34:20.510Z",
+  "referencePath": "/Users/cj/ai/game/yanglegeyang/src/experiment/engine.ts",
+  "generatedPath": "/Users/cj/ai/game/OpenGame/.opengame/workspaces/12fe11ab-a6e9-43eb-afc3-e45fad56974b-1/src/rules.ts",
+  "referenceHashes": {
+    "../yanglegeyang/src/experiment/engine.ts": "22374a663c18fd8b7e53f4237990280174310c9663462e1da85a8ed6c911f9b8"
+  },
+  "generatedHashes": {
+    ".opengame/workspaces/12fe11ab-a6e9-43eb-afc3-e45fad56974b-1/gameConfig.json": "46a5cfc716871b50e4edfd771b5ea2d0be6e8e92c9bdbea0c3a7a2d3eefa53df",
+    ".opengame/workspaces/12fe11ab-a6e9-43eb-afc3-e45fad56974b-1/src/rules.ts": "e5097ad255e1cff8d6911d35c14e137773c040b5e5815ac133424b1d8a38d411"
+  },
+  "comparedActions": 768,
+  "passed": 14,
+  "total": 14,
+  "outcomes": [
+    {
+      "name": "多个种子的标准关和教学关与原规则完全一致",
+      "passed": true
+    },
+    {
+      "name": "拒绝无效种子和不存在的关卡",
+      "passed": true
+    },
+    {
+      "name": "高层遮挡禁止选牌，移走上层后解锁",
+      "passed": true
+    },
+    {
+      "name": "三消、排序及同一张牌不能重复选取",
+      "passed": true
+    },
+    {
+      "name": "第七张形成三消时先消除而不是判负",
+      "passed": true
+    },
+    {
+      "name": "七格未消除即失败且终局不能操作",
+      "passed": true
+    },
+    {
+      "name": "暂存前三张并消耗一次，取回走同一三消规则",
+      "passed": true
+    },
+    {
+      "name": "撤销完整恢复三消前状态且不能再次撤销",
+      "passed": true
+    },
+    {
+      "name": "撤销取回能恢复暂存牌和已用道具",
+      "passed": true
+    },
+    {
+      "name": "洗牌仅改棋盘类型、保留牌总数并阻止重复使用",
+      "passed": true
+    },
+    {
+      "name": "棋盘清空但有暂存牌时不胜利，全部消除才胜利",
+      "passed": true
+    },
+    {
+      "name": "动作序号、牌来源和道具前置条件拒绝无效操作",
+      "passed": true
+    },
+    {
+      "name": "教学关真实规则完整通关与重新初始化",
+      "passed": true
+    },
+    {
+      "name": "跨种子完整动作序列持续与原项目对照且保持牌守恒",
+      "passed": true
+    }
+  ]
+}

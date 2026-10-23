@@ -1,0 +1,101 @@
+[
+  {
+    "id": "xialema-rules-v1",
+    "origin": "seed",
+    "title": "用纯规则模块保存可重现的牌局",
+    "tags": [
+      "消除",
+      "三消",
+      "卡牌",
+      "随机",
+      "种子",
+      "回合",
+      "match",
+      "card",
+      "seed"
+    ],
+    "appliesTo": "需要重放、规则对照或公平起点的离散状态游戏。",
+    "advice": "把初始状态、可操作对象和状态转换放在不依赖画面引擎的模块中。界面调用同一入口，不再维护另一套规则。需要可重现时固定随机种子，保存动作序号，并用相同种子和动作序列比较状态。虾了吗验证版使用 initial、active、clickable、step 四个入口。",
+    "pitfalls": "种子相同只保证可重现，不保证关卡可解。不同游戏应自行定义胜负条件，不能直接沿用七格托盘或三消规则。",
+    "source": {
+      "label": "虾了吗 · 单人规则与平台验证",
+      "reference": "benchmarks/xialema/README.md；规则基准 xialema-solo-v1"
+    },
+    "verification": "单人规则 14 组检查、768 次动作对照；教学关真实通关。适用范围仅限已检查的规则。"
+  },
+  {
+    "id": "xialema-undo-v1",
+    "origin": "seed",
+    "title": "撤销要恢复完整业务状态",
+    "tags": [
+      "撤销",
+      "暂存",
+      "道具",
+      "背包",
+      "消除",
+      "解谜",
+      "undo",
+      "puzzle",
+      "inventory"
+    ],
+    "appliesTo": "一次操作会同时改变多个区域、计数或消除结果的游戏。",
+    "advice": "操作前保存必要业务状态的快照，再执行状态转换。撤销恢复牌面、托盘、暂存和消除记录，同时独立消耗撤销次数。对清空历史的操作明确约定；界面的可用状态从规则状态推导。三消类游戏先完成匹配消除，再判断容器是否已满。",
+    "pitfalls": "只把最后一个对象放回会漏掉连锁影响。撤销自身的消耗不能随快照恢复；暂存区中的对象也必须参与胜负判断。",
+    "source": {
+      "label": "虾了吗 · 道具与胜负边界",
+      "reference": "benchmarks/xialema/results/v1.json"
+    },
+    "verification": "已对照撤销三消、撤销取回、道具一次限制及第七张先消除；浏览器实际操作暂存和撤销。"
+  },
+  {
+    "id": "waves-lifecycle-v1",
+    "origin": "seed",
+    "title": "把分批出现的对象交给独立调度模块",
+    "tags": [
+      "波次",
+      "塔防",
+      "敌人",
+      "障碍",
+      "战斗",
+      "刷怪",
+      "wave",
+      "enemy",
+      "spawn",
+      "defense"
+    ],
+    "appliesTo": "需要按时间分批出现敌人、目标或障碍的玩法。",
+    "advice": "可复用 WaveScheduler：输入波次配置与 spawn 回调，每次更新传入经过的毫秒数。场景卸载或重开时 stop，新局创建新实例。模块只负责调度；对象创建、消灭计数、计分和奖励由游戏决定。",
+    "pitfalls": "调度结束不等于所有敌人被消灭。不要把计分、场景和奖励耦合进公共调度模块，也不要按设备帧数计算时间。",
+    "reusableModule": ".opengame-context/modules/waves.ts",
+    "source": {
+      "label": "本地塔防项目 · 波次调度",
+      "reference": "agent-test/templates/modules/tower_defense/src/systems/WaveManager.ts；resources/modules/waves.ts"
+    },
+    "verification": "公共模块已检查顺序、停止、重开和异常时间输入；尚未证明所有玩法组合。"
+  },
+  {
+    "id": "game-container-v1",
+    "origin": "seed",
+    "title": "按实际试玩容器安排棋盘和控制区",
+    "tags": [
+      "界面",
+      "布局",
+      "手机",
+      "触屏",
+      "窄屏",
+      "重开",
+      "ui",
+      "mobile",
+      "responsive"
+    ],
+    "always": true,
+    "appliesTo": "嵌入工作台或需要窄屏操作的浏览器游戏。",
+    "advice": "布局依据当前容器而非外层屏幕尺寸。大容器可用主玩法区加侧栏，窄容器把状态、工具和暂存分成整行；压缩装饰和说明，确保主要操作可达，必要时允许纵向滚动。为重开和返回设置提供清晰入口，新局清理上一局状态。",
+    "pitfalls": "仅检查画布出现会漏掉被裁切的控制区。窄屏预览和鼠标点击不能证明真实手机触屏适配。",
+    "source": {
+      "label": "虾了吗 · 第二版试玩改进",
+      "reference": "benchmarks/xialema/README.md；版本 2 的容器和返回选关验证"
+    },
+    "verification": "实测 373×638 容器无横向溢出，滚动后可取回暂存牌；标准关和教学关可切换。"
+  }
+]

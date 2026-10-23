@@ -1,0 +1,20 @@
+{
+  "seed": 43127,
+  "width": 720,
+  "height": 480,
+  "columns": 12,
+  "cell": 60,
+  "spawnColumn": 5,
+  "safeRows": 3,
+  "aheadRows": 12,
+  "cameraBehind": 3,
+  "maxDeltaSeconds": 0.04,
+  "moveCooldownSeconds": 0.115,
+  "robotRadius": 15,
+  "carWidth": 76,
+  "carHeight": 34,
+  "carSpacing": 245,
+  "baseSpeed": 72,
+  "speedPerRow": 1.7,
+  "maxSpeed": 158
+}

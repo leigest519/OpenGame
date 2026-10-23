@@ -3,6 +3,15 @@
 **/dist
 **/.git
 **/node_modules
+**/.next
+**/.next-production
+**/.opengame/
+# Next rewrites this generated declaration during every build.
+packages/web/next-env.d.ts
+# These regression snapshots and checkers are pinned by manifest.json hashes.
+packages/web/benchmarks/popular/fixtures/
+packages/web/benchmarks/popular/check-*.mjs
+.opengame/
 .docker
 .DS_Store
 .env

@@ -1,0 +1,59 @@
+{
+  "name": "@opengame/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "start": "node --import tsx scripts/start.ts",
+    "invite": "node --import tsx scripts/invite.ts",
+    "generator:check": "node --import tsx scripts/check-generator.ts",
+    "backup": "node --import tsx scripts/backup.ts",
+    "dev:web": "next dev --hostname 127.0.0.1 --port 4190",
+    "worker": "tsx src/server/worker-main.ts",
+    "preview:games": "tsx src/server/preview-main.ts",
+    "db:start": "tsx scripts/local-db.ts start",
+    "db:stop": "tsx scripts/local-db.ts stop",
+    "seed": "tsx scripts/seed.ts",
+    "runtime:prepare": "tsx scripts/prepare-runtime.ts",
+    "runtime:check": "tsx scripts/check-project-runtime.ts",
+    "evolution:check": "node --import tsx scripts/check-evolution.ts",
+    "test:runtime": "tsx --test test/runtime/*.test.ts",
+    "build": "next build --webpack",
+    "build:production": "OPENGAME_NEXT_DIST_DIR=.next-production next build --webpack",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "test:ci": "npm run typecheck && npm test",
+    "test:integration": "tsx --test test/integration/*.test.ts",
+    "benchmark:xialema": "node benchmarks/xialema/check.mjs"
+  },
+  "dependencies": {
+    "@privy-io/react-auth": "3.49.0",
+    "esbuild": "^0.25.0",
+    "jose": "6.2.2",
+    "lucide-react": "1.56.0",
+    "mammoth": "^1.13.0",
+    "next": "16.4.3",
+    "pdfjs-dist": "^5.6.205",
+    "pg": "8.23.1",
+    "phaser": "3.90.0",
+    "playwright": "1.64.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "sharp": "0.35.5",
+    "three": "0.170.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "0.170.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3"
+  }
+}

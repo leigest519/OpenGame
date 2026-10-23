@@ -1,0 +1,19 @@
+{
+  "boardSize": 8,
+  "handSize": 3,
+  "undoPerGame": 1,
+  "pointsPerCell": 1,
+  "pointsPerLine": 10,
+  "canvasSize": 480,
+  "shapes": [
+    {"id":"dot","cells":[[0,0]]},
+    {"id":"pair","cells":[[0,0],[1,0]]},
+    {"id":"mast","cells":[[0,0],[0,1],[0,2]]},
+    {"id":"bar","cells":[[0,0],[1,0],[2,0],[3,0]]},
+    {"id":"square","cells":[[0,0],[1,0],[0,1],[1,1]]},
+    {"id":"hook","cells":[[0,0],[0,1],[1,1]]},
+    {"id":"dock","cells":[[0,0],[1,0],[2,0],[1,1]]},
+    {"id":"step","cells":[[1,0],[2,0],[0,1],[1,1]]},
+    {"id":"pier","cells":[[0,0],[0,1],[0,2],[1,2],[2,2]]}
+  ]
+}

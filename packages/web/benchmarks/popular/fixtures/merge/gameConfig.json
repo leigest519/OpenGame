@@ -1,0 +1,10 @@
+{
+  "width": 600, "height": 640,
+  "chamber": {"left": 64, "right": 536, "top": 90, "bottom": 594, "dangerY": 151, "spawnY": 111},
+  "physics": {"gravity": 740, "fixedStep": 0.0083333333, "maxDelta": 0.05, "iterations": 7, "restitution": 0.13, "friction": 0.988},
+  "dropCooldown": 0.48, "spawnProtection": 1.25, "dangerDuration": 2, "aimSpeed": 280,
+  "radii": [17, 24, 32, 41, 51, 63, 77, 92],
+  "colors": ["#83e6cc", "#75bfff", "#b39bff", "#ff9fc7", "#ffbe76", "#ffe782", "#ff887e", "#dfc5ff"],
+  "names": ["芽星", "泉星", "梦星", "桃星", "橘星", "耀星", "焰星", "极光星"],
+  "points": [0, 10, 25, 50, 90, 150, 240, 400]
+}

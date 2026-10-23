@@ -1,0 +1,23 @@
+[Unit]
+Description=OpenGame invited beta
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=opengame
+Group=opengame
+WorkingDirectory=/srv/opengame/packages/web
+EnvironmentFile=/etc/opengame/studio.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/var/lib/opengame
+ExecStart=/usr/bin/node --import tsx scripts/start.ts
+Restart=on-failure
+RestartSec=5
+KillMode=control-group
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

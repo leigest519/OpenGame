@@ -1,0 +1,265 @@
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  isolation: isolate;
+}
+
+.frame > iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 28px 20px 42px;
+  color: #f5f3ff;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 36%, #7961d91c, transparent 58%), #14192b;
+  opacity: 1;
+  transition: opacity 180ms ease-out;
+}
+
+.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.content {
+  width: min(100%, 360px);
+}
+
+.emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 15px;
+}
+
+.halo {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #baaaff21;
+  border-radius: 50%;
+  background: radial-gradient(circle, #9c82f71a, #9c82f700 72%);
+  animation: breathe 2.8s ease-in-out infinite;
+}
+
+.orbit {
+  position: absolute;
+  inset: 8px;
+  border: 1px solid #c7baff12;
+  border-radius: 50%;
+  animation: orbit 7s linear infinite;
+}
+
+.orbit::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c5b2ff;
+  box-shadow: 0 0 12px #ac90ff88;
+}
+
+.logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid #cfc5ff38;
+  border-radius: 23px;
+  background: linear-gradient(145deg, #706089, #342f4c 65%);
+  box-shadow:
+    0 12px 34px #06081250,
+    inset 0 1px 0 #ffffff1a;
+  animation: float 2.8s ease-in-out infinite;
+}
+
+.spark {
+  position: absolute;
+  left: 5px;
+  bottom: 22px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #b2a5d9;
+  animation: breathe 2.8s ease-in-out -1.4s infinite;
+}
+
+.brand {
+  font-size: 27px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.9px;
+}
+
+.tagline {
+  margin: 9px 0 31px;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  color: #aaa5c2;
+}
+
+.title {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.track {
+  width: 132px;
+  height: 3px;
+  margin: 15px auto 13px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #c5b6ff16;
+}
+
+.track > span {
+  display: block;
+  width: 52px;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #9473ff00, #b5a0ff, #9473ff00);
+  animation: travel 1.6s ease-in-out infinite;
+}
+
+.hint {
+  margin: 0;
+  min-height: 20px;
+  color: #a09bb5;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  margin-inline: 4px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #c8b6ff42;
+  border-radius: 9px;
+  background: #b49bff12;
+  color: #ece4ff;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.retry:hover {
+  background: #b49bff24;
+}
+
+.retry:focus-visible {
+  outline: 2px solid #c5b2ff;
+  outline-offset: 4px;
+}
+
+.signature {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  right: 20px;
+  color: #8c859f;
+  font-size: 8px;
+  letter-spacing: 2px;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(2px) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(3deg);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes travel {
+  from {
+    transform: translateX(-52px);
+  }
+  to {
+    transform: translateX(132px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading {
+    transition: none;
+  }
+  .halo,
+  .orbit,
+  .logo,
+  .spark,
+  .track > span {
+    animation: none;
+  }
+  .track > span {
+    margin: auto;
+  }
+}
+
+@media (max-height: 450px) {
+  .emblem {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 8px;
+  }
+  .logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 19px;
+  }
+  .brand {
+    font-size: 23px;
+  }
+  .tagline {
+    margin: 6px 0 18px;
+  }
+  .signature {
+    display: none;
+  }
+  .loading {
+    padding: 20px;
+  }
+}

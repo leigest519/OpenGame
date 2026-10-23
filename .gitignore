@@ -64,3 +64,12 @@ docs-site/content
 
 # guidance files
 guidance.md
+
+# Local game studio runtime, private projects, and generated previews
+.opengame/
+packages/web/.next/
+packages/web/.next-production/
+packages/web/.env.production.local
+packages/web/playwright-report/
+packages/web/test-results/
+packages/web/.env.local

@@ -25,6 +25,9 @@ export default tseslint.config(
       'packages/**/.integration-test/**',
       'dist/**',
       'docs-site/.next/**',
+      'packages/web/.next/**',
+      'packages/web/.next-production/**',
+      '**/.opengame/**',
       'docs-site/out/**',
       // agent-test/ is the agent's template corpus (game scaffolding,
       // template-skills, test cases) — vendored runtime fixtures rather
@@ -120,6 +123,9 @@ export default tseslint.config(
           allow: [
             'react-dom/test-utils',
             'react-dom/client',
+            'next/link',
+            'next/navigation',
+            'next/dynamic',
             'memfs/lib/volume.js',
             'yargs/**',
             'msw/node',
@@ -191,7 +197,7 @@ export default tseslint.config(
   },
   // extra settings for scripts that we run directly with node
   {
-    files: ['./scripts/**/*.js', 'esbuild.config.js', 'packages/*/scripts/**/*.js'],
+    files: ['./scripts/**/*.js', 'esbuild.config.js', 'packages/*/scripts/**/*.js', 'packages/web/**/*.mjs'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -209,6 +215,11 @@ export default tseslint.config(
         },
       ],
     },
+  },
+  {
+    // Studio uses Node's test runner, including subprocess and database fixtures.
+    files: ['packages/web/test/**/*.test.ts'],
+    rules: { 'vitest/no-import-node-test': 'off' },
   },
   // extra settings for core package scripts
   {

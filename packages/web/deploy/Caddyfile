@@ -1,0 +1,12 @@
+# These are proposed new hosts. Do not replace xiajuan.app's existing Pages site.
+studio.xiajuan.app {
+    request_body {
+        max_size 3MB
+    }
+    reverse_proxy 127.0.0.1:4190
+}
+
+studio-games.xiajuan.app {
+    # Game URLs contain revocable preview credentials. Keep access logs disabled.
+    reverse_proxy 127.0.0.1:4191
+}

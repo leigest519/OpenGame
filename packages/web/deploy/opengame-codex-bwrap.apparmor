@@ -1,0 +1,14 @@
+# Ubuntu 24.04: allow only the root-owned, pinned Codex sandbox helper to
+# construct its user/network namespaces. Keep the global userns restriction.
+abi <abi/4.0>,
+include <tunables/global>
+
+# Codex may execute its bundled helper through an anonymous file descriptor;
+# let that child inherit the named profile from the fixed Codex binary.
+profile opengame-codex /opt/opengame-tools/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/bin/codex flags=(unconfined) {
+  userns,
+}
+
+profile opengame-codex-bwrap /opt/opengame-tools/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-resources/bwrap flags=(unconfined) {
+  userns,
+}

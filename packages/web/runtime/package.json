@@ -1,0 +1,12 @@
+{
+  "name": "opengame-project-runtime",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "esbuild": "0.25.12",
+    "phaser": "3.90.0",
+    "playwright": "1.64.0",
+    "three": "0.170.0"
+  }
+}

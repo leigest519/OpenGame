@@ -18,6 +18,8 @@
     "sandboxImageUri": "ghcr.io/leigest519/opengame:0.6.0"
   },
   "scripts": {
+    "studio": "npm run dev --workspace=@opengame/web",
+    "studio:check": "npm run typecheck --workspace=@opengame/web && npm run test --workspace=@opengame/web",
     "start": "cross-env node scripts/start.js",
     "debug": "cross-env DEBUG=1 node --inspect-brk scripts/start.js",
     "generate": "node scripts/generate-git-commit-info.js",

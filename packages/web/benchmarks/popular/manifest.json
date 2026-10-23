@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "scope": "reference-rules",
+  "cases": [
+    {
+      "id": "block",
+      "title": "方块港湾",
+      "projectId": "862d7250-c7d7-454d-94cf-a994b67a53f0",
+      "versionId": "0ea76385-4a54-4949-93a7-b6545746d1c0",
+      "commit": "b83bef23104dc692acee0be38e6f1dcd9bd411e4",
+      "files": {
+        "src/rules.ts": "ba067548d8f715f6c67271ff7be56ee333695266526d8305764f04ddbdd40091",
+        "gameConfig.json": "e5741c4ec41e8e613e853a9012ec02c1ad1e77980068ad47236baa2ffa866ee7"
+      },
+      "checkerHash": "eb2a0cae0abca78e9a73e977fb2579555f292b7cfc5f124ac8e45ee47023b010",
+      "tests": [
+        "空棋盘与三种不同手牌",
+        "教学消行得11分且不改变输入",
+        "重叠越界拒绝且不扣牌不加分",
+        "同时清行列交叉格只清除一次",
+        "必须所有剩余块都无处放才判负",
+        "第三块用完才补牌",
+        "结束后落子不改变状态",
+        "独立棋盘对照500次落子/消除/死局",
+        "撤销消行完整恢复且不改变原状态",
+        "错误落子不覆盖撤销快照",
+        "补牌后撤销再落同处不会刷出不同手牌",
+        "死局撤销救回且重开恢复一次机会"
+      ]
+    },
+    {
+      "id": "merge",
+      "title": "星球合成站",
+      "projectId": "f9e9dd31-c67d-4c57-9669-9a252f632b89",
+      "versionId": "05fbb107-fe65-4eea-b1ef-14fabca1051b",
+      "commit": "c2bf2e0715eb3789d1624881616654cf5138f364",
+      "files": {
+        "src/modules/physics.ts": "525fc05de4c9282b64e29b678a505128d645e0dda93b24ccca17c073d3eb9c04",
+        "gameConfig.json": "97dcc02db05207f69cdf0aed470a620d2ae94073fc14cb5727745bb23c44f46e"
+      },
+      "checkerHash": "9ef2cbbfff868888d7848308384904754394044dd81e5e665b4a167c076b9242",
+      "tests": [
+        "同级合成一次且分数正确",
+        "三个相交同级球不能重复消费",
+        "异级与最高级接触不合成",
+        "重力落下后留在底部和侧壁内",
+        "新球保护与连续2秒危险计时",
+        "短暂越线回到安全区后清零",
+        "固定序列连续投放守恒和有限数值"
+      ]
+    },
+    {
+      "id": "crossing",
+      "title": "快递穿行",
+      "projectId": "d18ed97a-9c14-44f5-9f49-a28354ba9d6e",
+      "versionId": "971379c0-f62a-4d83-8ad0-4304f4a09a82",
+      "commit": "95b3877175379e208d33dd1e9b8ea406f83beb56",
+      "files": {
+        "src/modules/rules.ts": "5b3165de98a64827054de9e3b1a53982e448892164ba32875b30797ef449da79",
+        "src/modules/roads.ts": "e335d991ceb2371e2405ae58c0a19e31fe382e9ed601846a6bf80ae9d3043020",
+        "gameConfig.json": "8cba099107bb815d0cebb14c2a4e9a91eba3658dc27aa29d26bddfc43bb7ef4e"
+      },
+      "checkerHash": "16915d7efcdb1bc8d1e5092f28fe8ae814838761004c9a8d02cc0b3ec7659b18",
+      "tests": [
+        "同种子道路一致且前三行安全",
+        "回退前进与左右移动不刷分",
+        "冷却与边界拒绝多次移动",
+        "暂停冻结车辆时间角色与计分",
+        "道路上不动也会被驶来的车撞到",
+        "移动撞车后冻结并且不加距离",
+        "重新构造一局恢复固定安全开局",
+        "500行道路有限数值且车速有界"
+      ]
+    }
+  ]
+}
